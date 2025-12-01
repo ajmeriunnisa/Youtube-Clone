@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -16,6 +17,7 @@ function App() {
       {/* Header */}
       <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         {/* Sidebar*/}
+        <Outlet/>
       <Sidebar isOpen={isSidebarOpen} /> 
     </div>
   );
