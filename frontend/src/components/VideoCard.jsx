@@ -1,35 +1,61 @@
 import React from "react";
+import { RxDotFilled } from "react-icons/rx";
 
-// VideoCard component to display single video details
 const VideoCard = ({ video }) => {
-    // Format views to K/M notation
     const formatViews = (num) => {
-        if (num >= 1000000) return (num / 1000000).toFixed(1) + "M views";
+        if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + "B views";
+        if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M views";
         if (num >= 1000) return (num / 1000).toFixed(1) + "K views";
         return num + " views";
     };
 
     return (
-        <div className="cursor-pointer hover:shadow-lg transition-shadow duration-200">
-            {/* Video Thumbnail */}
+        <div
+            className="
+                cursor-pointer 
+                w-full max-w-sm 
+                p-2 
+                rounded-xl 
+                transition-all 
+                duration-200 
+                hover:bg-gray-200 dark:hover:bg-[#272727]
+            "
+        >
+            {/* Thumbnail */}
             <img
                 src={video.thumbnailUrl}
                 alt={video.title}
-                className="w-full h-48 object-cover rounded-lg"
+                className="
+                    w-full 
+                    h-48 
+                    object-cover 
+                    rounded-xl 
+                    transition-all 
+                    duration-200 
+                    hover:rounded-lg
+                "
             />
 
-            {/* Video Information */}
-            <div className="mt-2 px-1">
-                {/* Video Title */}
-                <h3 className="text-sm font-semibold line-clamp-2">
+            {/* Text Section */}
+            <div className="mt-3">
+                {/* Title */}
+                <h3 className="text-sm font-semibold line-clamp-2 leading-tight">
                     {video.title}
                 </h3>
 
                 {/* Channel Name */}
-                <p className="text-xs text-gray-500 mt-1">{video.channelName}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                    {video.channelName}
+                </p>
 
-                {/* Views */}
-                <p className="text-xs text-gray-500">{formatViews(video.views)}</p>
+                {/* Views + Upload Time */}
+                <div className="flex items-center text-xs text-gray-500">
+                    <span>{formatViews(video.views)}</span>
+
+                    <RxDotFilled className="text-gray-400 text-lg mx-0.5" />
+
+                    <span>{video.uploadDate}</span>
+                </div>
             </div>
         </div>
     );
