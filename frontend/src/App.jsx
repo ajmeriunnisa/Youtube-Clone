@@ -7,6 +7,8 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   // search text state
   const [searchQuery, setSearchQuery] = useState("");
+  // category state
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   // ON FIRST LOAD → sidebar open on desktop, closed on mobile
   useEffect(() => {
@@ -20,7 +22,9 @@ function App() {
       {/* ---------------------- HEADER (always at top) ---------------------- */}
       <Header 
       onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
-      onSearch={setSearchQuery}/>
+      onSearch={setSearchQuery}
+      selectedCategory={selectedCategory}
+      onCategorySelect={setSelectedCategory}/>
 
       <div className="flex">
 
@@ -34,7 +38,7 @@ function App() {
             ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}
           `}
         >
-          <Outlet context={{ searchQuery }} />
+          <Outlet context={{ searchQuery , selectedCategory }} />
         </main>
 
       </div>

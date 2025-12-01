@@ -13,19 +13,26 @@ const categories = [
     "T-Series"
 ];
 
-const FilterBar = () => {
-    return (
-        <div className="flex space-x-5 overflow-x-auto py-4 px-5 bg-white border-b border-gray-200 pl-0 lg:pl-56">
-            {categories.map((category, index) => (
-                <button
-                    key={index}
-                    className="shrink-0 px-4 py-1 rounded-full bg-gray-100 text-sm hover:bg-gray-200 transition"
-                >
-                    {category}
-                </button>
-            ))}
-        </div>
-    );
+const FilterBar = ({ selectedCategory, onCategorySelect }) => {
+  return (
+    <div className="flex space-x-5 overflow-x-auto py-4 px-5 bg-white border-b border-gray-200">
+      {categories.map((category, index) => {
+        const isActive = selectedCategory === category;
+
+        return (
+          <button
+            key={index}
+            onClick={() => onCategorySelect(category)}
+            className={`shrink-0 px-4 py-1 rounded-full text-sm transition cursor-pointer
+              ${isActive ? "bg-black text-white" : "bg-gray-100 hover:bg-gray-200"}
+            `}
+          >
+            {category}
+          </button>
+        );
+      })}
+    </div>
+  );
 };
 
 export default FilterBar;

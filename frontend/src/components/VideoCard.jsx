@@ -22,6 +22,7 @@ const VideoCard = ({ video }) => {
             "
         >
             {/* Thumbnail */}
+            <div className="relative">
             <img
                 src={video.thumbnailUrl}
                 alt={video.title}
@@ -35,6 +36,14 @@ const VideoCard = ({ video }) => {
                     hover:rounded-lg
                 "
             />
+
+            {/* Duration Badge */}
+            {video.duration && (
+            <span className="absolute bottom-1 right-1 bg-black text-white text-[10px] px-1.5 py-0.5 rounded-sm">
+                {video.duration}
+            </span>
+            )}
+            </div>
 
             {/* Text Section */}
             <div className="mt-3">

@@ -4,14 +4,22 @@ import VideoCard from "../components/VideoCard";
 import { useOutletContext } from "react-router-dom";
 
 const Home = () => {
-    const { searchQuery } = useOutletContext();
+    const { searchQuery , selectedCategory } = useOutletContext();
     // Getting all videos from our custom hook
     const videos = useVideos();
 
-     // FILTER VIDEOS BASED ON SEARCH
-    const filteredVideos = videos.filter((video) =>
-        video.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // 1) filter by category (if not "All")
+    const byCategory =
+        selectedCategory === "All"
+        ? videos
+        : videos.filter((video) => video.category === selectedCategory);
+
+    // 2) filter by search (if searchQuery is non-empty)
+    const finalList = (searchQuery || "").trim() === ""
+        ? byCategory
+        : byCategory.filter((video) =>
+            video.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
+        );
     return (
         <div className="px-4 mt-4">
 
@@ -22,13 +30,13 @@ const Home = () => {
           gap-6 
           mt-6 
           sm:grid-cols-2 
-          md:grid-cols-3 
-          lg:grid-cols-4 
-          xl:grid-cols-5
+          md:grid-cols-2 
+          lg:grid-cols-3 
+          xl:grid-cols-4
         "
             >
-                {filteredVideos.map((video) => (
-                    <VideoCard key={video.id} video={video} />
+                {finalList.map((video) => (
+                    <VideoCard key={video.videoId || video.id} video={video} />
                 ))}
             </div>
         </div>

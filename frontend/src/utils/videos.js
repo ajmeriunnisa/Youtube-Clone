@@ -6,7 +6,8 @@ const videos = [
     channelName: "Code with John",
     views: 15200,
     uploadDate: "2024-09-20",
-    category: "Software",
+    category: "Education",
+    duration: "3:45",
     videoUrl: "https://example.com/videos/react.mp4"
   },
   {
@@ -17,6 +18,7 @@ const videos = [
     views: 78000,
     uploadDate: "2024-09-18",
     category: "Entertainment",
+    duration: "7:55",
     videoUrl: "https://example.com/videos/dramas.mp4"
   },
   {
@@ -27,6 +29,7 @@ const videos = [
     views: 125000,
     uploadDate: "2024-09-10",
     category: "Music",
+    duration: "30:45",
     videoUrl: "https://example.com/videos/music.mp4"
   },
   {
@@ -37,6 +40,7 @@ const videos = [
     views: 210000,
     uploadDate: "2024-09-22",
     category: "Music",
+    duration: "8:25",
     videoUrl: "https://example.com/videos/ts.mp4"
   },
   {
@@ -47,6 +51,7 @@ const videos = [
     views: 34000,
     uploadDate: "2024-09-15",
     category: "Software",
+    duration: "2:25",
     videoUrl: "https://example.com/videos/se.mp4"
   },
   {
@@ -57,6 +62,7 @@ const videos = [
     views: 89000,
     uploadDate: "2024-09-12",
     category: "Gaming",
+    duration: "1:45",
     videoUrl: "https://example.com/videos/gaming.mp4"
   },
   {
@@ -66,7 +72,8 @@ const videos = [
     channelName: "Code with John",
     views: 42000,
     uploadDate: "2024-09-08",
-    category: "Software",
+    category: "Education",
+    duration: "5:15",
     videoUrl: "https://example.com/videos/hooks.mp4"
   },
   {
@@ -77,6 +84,7 @@ const videos = [
     views: 67000,
     uploadDate: "2024-09-14",
     category: "Entertainment",
+    duration: "3:45",
     videoUrl: "https://example.com/videos/dramas2.mp4"
   },
   {
@@ -87,6 +95,7 @@ const videos = [
     views: 98000,
     uploadDate: "2024-09-20",
     category: "Gaming",
+    duration: "8:45",
     videoUrl: "https://example.com/videos/gaming2.mp4"
   },
   {
@@ -97,25 +106,29 @@ const videos = [
     views: 56000,
     uploadDate: "2024-09-18",
     category: "Technology",
+    duration: "9:42",
     videoUrl: "https://example.com/videos/tech.mp4"
   },
   {
-    videoId: "video05",
+    videoId: "video11",
     title: "Software Engineering Tips",
     thumbnailUrl: "https://picsum.photos/id/1055/400/225",
     channelName: "Tech Guru",
     views: 34000,
     uploadDate: "2024-09-15",
     category: "Software",
+    duration:"15:40",
     videoUrl: "https://example.com/videos/se.mp4"
-  },,{
-    videoId: "video05",
+  },
+  {
+    videoId: "video12",
     title: "Software Engineering Tips",
     thumbnailUrl: "https://picsum.photos/id/1055/400/225",
     channelName: "Tech Guru",
     views: 34000,
     uploadDate: "2024-09-15",
     category: "Software",
+    duration: "9:15",
     videoUrl: "https://example.com/videos/se.mp4"
   },
 ];

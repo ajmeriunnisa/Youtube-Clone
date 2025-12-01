@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
 
-const Header = ({ onToggleSidebar , onSearch}) => {
+const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelect}) => {
 
   const [searchText, setSearchText] = useState(""); // Search state
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(searchText);
+    onSearch(searchText.trim());
   };
   return (
     <>
@@ -32,7 +32,7 @@ const Header = ({ onToggleSidebar , onSearch}) => {
           </button>
 
           {/* LOGO */}
-          <a className="flex items-center gap-1">
+          <a href="/" className="flex items-center gap-1 cursor-pointer">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
               alt="YouTube Logo"
@@ -43,24 +43,25 @@ const Header = ({ onToggleSidebar , onSearch}) => {
 
         {/* SEARCH BAR */}
         <form
-        onSubmit={handleSubmit}
-          className="
-          hidden sm:flex items-center 
-          bg-gray-100 rounded-full px-4 py-1 w-[40%] 
-        "
+          onSubmit={handleSubmit}
+          className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300"
         >
           <input
             type="text"
             placeholder="Search"
             value={searchText}
-            className="bg-transparent outline-none w-full text-sm"
-            onChange={(e)=>setSearchText(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-l-full"
           />
 
-          <button type="submit">
-            <FiSearch className="text-lg text-gray-600" />
+          <button
+            type="submit"
+            className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r-full flex items-center justify-center"
+          >
+            <FiSearch className="text-gray-600 text-lg" />
           </button>
         </form>
+
 
         {/* RIGHT SECTION — Notification + Profile */}
         <div className="flex items-center gap-4">
@@ -84,7 +85,10 @@ const Header = ({ onToggleSidebar , onSearch}) => {
       </header>
       {/* FILTER BAR BELOW HEADER */}
       <div className="w-full bg-white sticky top-16 z-40 border-b">
-        <FilterBar />
+        <FilterBar 
+          selectedCategory={selectedCategory}
+          onCategorySelect={onCategorySelect}
+        />
       </div>
     </>
   );
