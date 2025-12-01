@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
 
-const Header = ({ onToggleSidebar }) => {
+const Header = ({ onToggleSidebar , onSearch}) => {
 
+  const [searchText, setSearchText] = useState(""); // Search state
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchText);
+  };
   return (
     <>
       <header
@@ -37,6 +43,7 @@ const Header = ({ onToggleSidebar }) => {
 
         {/* SEARCH BAR */}
         <form
+        onSubmit={handleSubmit}
           className="
           hidden sm:flex items-center 
           bg-gray-100 rounded-full px-4 py-1 w-[40%] 
@@ -45,8 +52,9 @@ const Header = ({ onToggleSidebar }) => {
           <input
             type="text"
             placeholder="Search"
+            value={searchText}
             className="bg-transparent outline-none w-full text-sm"
-
+            onChange={(e)=>setSearchText(e.target.value)}
           />
 
           <button type="submit">

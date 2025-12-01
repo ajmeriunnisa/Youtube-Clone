@@ -5,6 +5,8 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // search text state
+  const [searchQuery, setSearchQuery] = useState("");
 
   // ON FIRST LOAD → sidebar open on desktop, closed on mobile
   useEffect(() => {
@@ -16,7 +18,9 @@ function App() {
     <div className="min-h-screen bg-gray-50">
 
       {/* ---------------------- HEADER (always at top) ---------------------- */}
-      <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <Header 
+      onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+      onSearch={setSearchQuery}/>
 
       <div className="flex">
 
@@ -30,7 +34,7 @@ function App() {
             ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}
           `}
         >
-          <Outlet />
+          <Outlet context={{ searchQuery }} />
         </main>
 
       </div>

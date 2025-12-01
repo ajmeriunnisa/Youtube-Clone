@@ -1,11 +1,17 @@
 import React from "react";
 import useVideos from "../hooks/useVideos"; // custom hook to fetch sample videos
 import VideoCard from "../components/VideoCard";
+import { useOutletContext } from "react-router-dom";
 
 const Home = () => {
+    const { searchQuery } = useOutletContext();
     // Getting all videos from our custom hook
     const videos = useVideos();
 
+     // FILTER VIDEOS BASED ON SEARCH
+    const filteredVideos = videos.filter((video) =>
+        video.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     return (
         <div className="px-4 mt-4">
 
@@ -21,7 +27,7 @@ const Home = () => {
           xl:grid-cols-5
         "
             >
-                {videos.map((video) => (
+                {filteredVideos.map((video) => (
                     <VideoCard key={video.id} video={video} />
                 ))}
             </div>
