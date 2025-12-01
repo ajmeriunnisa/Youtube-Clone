@@ -1,77 +1,55 @@
-import { AiFillHome, AiOutlineLike } from "react-icons/ai";
-import { MdExplore, MdVideoLibrary, MdHistory, MdWatchLater, MdSettings } from "react-icons/md";
-import { FaUserCircle, FaQuestionCircle } from "react-icons/fa";
-import { BiMessageDetail } from "react-icons/bi";
+import React from "react";
+import {FiHome,FiCompass,FiYoutube,FiClock,FiThumbsUp,FiPlay,FiList,FiTrendingUp} from "react-icons/fi";
 
 const Sidebar = ({ isOpen }) => {
   return (
     <aside
-      className={`fixed top-0 left-0 h-full bg-white border-r border-gray-200 p-4 w-60
-        transform transition-transform duration-300 z-40
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
-    >
-      <h2 className="text-lg font-bold mb-6">Menu</h2>
+  className={`
+  bg-white border-r border-gray-300 h-screen 
+  fixed top-16 left-0 z-40 lg:static lg:top-0
+  transition-all duration-300 ease-in-out
 
-      {/* MAIN */}
-      <div className="mb-6">
-        <p className="text-sm text-gray-500 mb-2 mt-10">Main</p>
-        <nav className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <AiFillHome className="text-xl" />
-            <span>Home</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <MdExplore className="text-xl" />
-            <span>Explore</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <MdVideoLibrary className="text-xl" />
-            <span>Subscriptions</span>
-          </div>
-        </nav>
-      </div>
+  ${isOpen ? "w-56 translate-x-0" : "w-20 lg:translate-x-0 -translate-x-full"}
+`}
 
-      {/* YOU */}
-      <div className="mb-6">
-        <p className="text-sm text-gray-500 mb-2">You</p>
-        <nav className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <FaUserCircle className="text-xl" />
-            <span>Your Channel</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <MdHistory className="text-xl" />
-            <span>History</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <MdWatchLater className="text-xl" />
-            <span>Watch Later</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <AiOutlineLike className="text-xl" />
-            <span>Liked Videos</span>
-          </div>
-        </nav>
-      </div>
+>
+      <nav className="p-4 flex flex-col gap-2 text-sm text-left">
+        {/* Top section */}
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
+          <FiHome /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Home</span>
+        </div>
 
-      {/* MORE */}
-      <div>
-        <p className="text-sm text-gray-500 mb-2">More</p>
-        <nav className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <MdSettings className="text-xl" />
-            <span>Settings</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <FaQuestionCircle className="text-xl" />
-            <span>Help</span>
-          </div>
-          <div className="flex items-center gap-3 hover:bg-gray-100 p-2 rounded cursor-pointer">
-            <BiMessageDetail className="text-xl" />
-            <span>Send Feedback</span>
-          </div>
-        </nav>
-      </div>
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md" >
+          <FiCompass /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Explore</span>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md" >
+          <FiTrendingUp /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Trending</span>
+        </div>
+
+        <div className="border-t my-2"></div>
+
+        {/* Library */}
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
+          <FiYoutube /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Library</span>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md" >
+          <FiClock /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Watch Later</span>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
+          <FiThumbsUp /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Liked Videos</span>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
+          <FiPlay /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Your Videos</span>
+        </div>
+
+        <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
+          <FiList /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Playlists</span>
+        </div>
+      </nav>
     </aside>
   );
 };

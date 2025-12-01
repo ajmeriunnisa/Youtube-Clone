@@ -1,21 +1,30 @@
-import { HiOutlineMenu } from "react-icons/hi";
-import { AiOutlineSearch, AiOutlineVideoCameraAdd } from "react-icons/ai";
-import { BsBell } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
+import React, { useState } from "react";
+import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 
-const Header = ({ toggleSidebar }) => {
+const Header = ({ onToggleSidebar }) => {
+
   return (
-    <header className="w-full flex items-center justify-between px-4 py-5 bg-white shadow-md sticky top-0 z-50">
-
-      {/* LEFT: Hamburger + Logo */}
-      <div className="flex items-center gap-4">
-        {/* Hamburger always visible */}
-        <button onClick={toggleSidebar}>
-          <HiOutlineMenu className="text-2xl cursor-pointer" />
+    <header
+      className="
+        w-full h-16 px-4 flex items-center justify-between 
+        bg-white border-b border-gray-200 sticky top-0 z-50
+      "
+    >
+      {/* LEFT SECTION — Hamburger + Logo */}
+      <div className="flex items-center gap-3">
+        {/* Hamburger button */}
+        <button
+          onClick={onToggleSidebar}
+          aria-label="Toggle menu"
+          className="
+            p-2 rounded-md hover:bg-gray-200 transition
+          "
+        >
+          <FiMenu className="text-xl" />
         </button>
 
-        {/* YouTube Logo */}
-        <a href="/" className="flex items-center gap-1">
+        {/* LOGO */}
+        <a className="flex items-center gap-1">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
             alt="YouTube Logo"
@@ -24,23 +33,43 @@ const Header = ({ toggleSidebar }) => {
         </a>
       </div>
 
-      {/* CENTER: Search bar (desktop only) */}
-      <div className="hidden md:flex items-center w-1/2">
+      {/* SEARCH BAR */}
+      <form
+        className="
+          hidden sm:flex items-center 
+          bg-gray-100 rounded-full px-4 py-1 w-[40%] 
+        "
+      >
         <input
           type="text"
           placeholder="Search"
-          className="w-full border border-gray-300 px-4 py-1 rounded-l-full focus:outline-none"
+          className="bg-transparent outline-none w-full text-sm"
+          
         />
-        <button className="bg-gray-100 border border-gray-300 border-l-0 px-4 py-1 rounded-r-full hover:bg-gray-200">
-          <AiOutlineSearch className="text-xl" />
-        </button>
-      </div>
 
-      {/* RIGHT: Icons */}
+        <button type="submit">
+          <FiSearch className="text-lg text-gray-600" />
+        </button>
+      </form>
+
+      {/* RIGHT SECTION — Notification + Profile */}
       <div className="flex items-center gap-4">
-        <AiOutlineVideoCameraAdd className="text-2xl cursor-pointer hover:text-gray-600" />
-        <BsBell className="text-2xl cursor-pointer hover:text-gray-600" />
-        <FaUserCircle className="text-3xl cursor-pointer hover:text-gray-600" />
+        {/* Notification bell */}
+        <button className="p-2 rounded-md hover:bg-gray-200 transition">
+          <FiBell className="text-lg" />
+        </button>
+
+        {/* Profile / Sign in */}
+        <button
+          className="
+            flex items-center gap-2 
+            bg-blue-600 text-white text-sm 
+            px-3 py-1.5 rounded-md 
+            hover:bg-blue-700 transition
+          "
+        >
+          <FiUser /> Sign in
+        </button>
       </div>
     </header>
   );
