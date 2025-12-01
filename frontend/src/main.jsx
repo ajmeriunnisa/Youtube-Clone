@@ -1,18 +1,20 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import {createBrowserRouter, RouterProvider} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import App from './App.jsx'
+import Home from './pages/Home.jsx'
 
-const appRouter=createBrowserRouter([
+const appRouter = createBrowserRouter([
   {
-    path:"/",
-    element:(
-      <App/>
+    path: "/",
+    element: (
+      <App />
     ),
-    children:[
+    children: [
       {
-     
+        path: "/",
+        element: <Home />
       }
     ]
   }
@@ -20,5 +22,5 @@ const appRouter=createBrowserRouter([
 
 // ===== Rendering the App to the DOM =====
 createRoot(document.getElementById('root')).render(
-    <RouterProvider router={appRouter} />
+  <RouterProvider router={appRouter} />
 )

@@ -14,11 +14,26 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+
+      {/* ---------------------- HEADER (always at top) ---------------------- */}
       <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        {/* Sidebar*/}
-        <Outlet/>
-      <Sidebar isOpen={isSidebarOpen} /> 
+
+      <div className="flex">
+
+        {/* ---------------------- SIDEBAR ---------------------- */}
+        <Sidebar isOpen={isSidebarOpen} />
+
+        {/* ---------------------- MAIN CONTENT ---------------------- */}
+        <main
+          className={`
+            flex-1 p-4 transition-all duration-300 ml-0
+            ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}
+          `}
+        >
+          <Outlet />
+        </main>
+
+      </div>
     </div>
   );
 }

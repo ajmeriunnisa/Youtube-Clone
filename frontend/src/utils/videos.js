@@ -98,7 +98,26 @@ const videos = [
     uploadDate: "2024-09-18",
     category: "Technology",
     videoUrl: "https://example.com/videos/tech.mp4"
-  }
+  },
+  {
+    videoId: "video05",
+    title: "Software Engineering Tips",
+    thumbnailUrl: "https://picsum.photos/id/1055/400/225",
+    channelName: "Tech Guru",
+    views: 34000,
+    uploadDate: "2024-09-15",
+    category: "Software",
+    videoUrl: "https://example.com/videos/se.mp4"
+  },,{
+    videoId: "video05",
+    title: "Software Engineering Tips",
+    thumbnailUrl: "https://picsum.photos/id/1055/400/225",
+    channelName: "Tech Guru",
+    views: 34000,
+    uploadDate: "2024-09-15",
+    category: "Software",
+    videoUrl: "https://example.com/videos/se.mp4"
+  },
 ];
 
 export default videos;

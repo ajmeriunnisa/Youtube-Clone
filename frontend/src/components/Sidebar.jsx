@@ -1,18 +1,18 @@
 import React from "react";
-import {FiHome,FiCompass,FiYoutube,FiClock,FiThumbsUp,FiPlay,FiList,FiTrendingUp} from "react-icons/fi";
+import { FiHome, FiCompass, FiYoutube, FiClock, FiThumbsUp, FiPlay, FiList, FiTrendingUp } from "react-icons/fi";
 
 const Sidebar = ({ isOpen }) => {
   return (
     <aside
-  className={`
-  bg-white border-r border-gray-300 h-screen 
-  fixed top-16 left-0 z-40 lg:static lg:top-0
-  transition-all duration-300 ease-in-out
+      className={`
+    fixed top-32 left-0 bottom-0 z-30
+    bg-white border-r border-gray-300
+    overflow-y-auto
+    transition-all duration-300 ease-in-out
 
-  ${isOpen ? "w-56 translate-x-0" : "w-20 lg:translate-x-0 -translate-x-full"}
-`}
-
->
+    ${isOpen ? "w-56 translate-x-0" : "w-20 -translate-x-full lg:translate-x-0"}
+  `}
+    >
       <nav className="p-4 flex flex-col gap-2 text-sm text-left">
         {/* Top section */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
