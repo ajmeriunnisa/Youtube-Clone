@@ -13,8 +13,8 @@ const VideoCard = ({ video }) => {
         <div
             className="
                 cursor-pointer 
-                w-full max-w-sm 
-                p-2 
+                w-full max-w-lg 
+                p-3 
                 rounded-xl 
                 transition-all 
                 duration-200 
@@ -28,12 +28,12 @@ const VideoCard = ({ video }) => {
                 alt={video.title}
                 className="
                     w-full 
-                    h-48 
+                    h-60 
                     object-cover 
                     rounded-xl 
                     transition-all 
                     duration-200 
-                    hover:rounded-lg
+                    hover:rounded-none
                 "
             />
 

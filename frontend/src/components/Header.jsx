@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
+import { Link } from "react-router-dom";
 
 const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelect}) => {
 
@@ -10,6 +11,9 @@ const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelec
     e.preventDefault();
     onSearch(searchText.trim());
   };
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
   return (
     <>
       <header
@@ -32,13 +36,9 @@ const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelec
           </button>
 
           {/* LOGO */}
-          <a href="/" className="flex items-center gap-1 cursor-pointer">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
-              alt="YouTube Logo"
-              className="h-5 md:h-6"
-            />
-          </a>
+          <Link to={isLoggedIn ? "/" : "/login"} className="flex items-center gap-1 cursor-pointer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="logo" className="h-5 md:h-6" />
+          </Link>
         </div>
 
         {/* SEARCH BAR */}

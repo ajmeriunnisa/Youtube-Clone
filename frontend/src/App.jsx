@@ -29,7 +29,7 @@ function App() {
       <div className="flex">
 
         {/* ---------------------- SIDEBAR ---------------------- */}
-        <Sidebar isOpen={isSidebarOpen} />
+        <Sidebar isOpen={isSidebarOpen}  />
 
         {/* ---------------------- MAIN CONTENT ---------------------- */}
         <main
