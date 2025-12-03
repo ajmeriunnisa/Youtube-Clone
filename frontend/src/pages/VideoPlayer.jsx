@@ -1,20 +1,22 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import videos from "../utils/videos"; 
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+
 
 const VideoPlayer = () => {
   //  Get video ID from URL
   const { id } = useParams();
 
   //  Find the video from data
-  const video = videos.find((v) => v.id === parseInt(id));
+  const video = videos.find((v) => v.id === id);
 
   if (!video) {
     return <div className="p-4">Video not found</div>;
   }
 
   return (
-    <div className="flex gap-6 p-4 mt-16">
+    <div className="flex gap-6 p-4">
       {/* LEFT SECTION — VIDEO PLAYER + DETAILS */}
       <div className="w-[70%]">
 
@@ -33,13 +35,23 @@ const VideoPlayer = () => {
           {/* Channel Info */}
           <div>
             <p className="font-bold text-gray-800">{video.channel}</p>
-            <p className="text-sm text-gray-500">{video.views} • {video.time}</p>
+            <p className="text-sm text-gray-500">{video.views} • {video.uploadDate}</p>
           </div>
 
           {/* Action buttons section (Static buttons) */}
-          <div className="flex gap-3">
-            <button className="px-4 py-2 bg-gray-200 rounded-full">👍 Like</button>
-            <button className="px-4 py-2 bg-gray-200 rounded-full">👎 Dislike</button>
+          <div className="flex items-center gap-3">
+
+            {/* LIKE BUTTON */}
+            <button className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200 transition">
+                <AiOutlineLike className="text-xl text-gray-700" />
+                <span className="text-sm">{video.likes}</span>
+            </button>
+
+            {/* DISLIKE BUTTON */}
+            <button className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200 transition">
+                <AiOutlineDislike className="text-xl text-gray-700" />
+                <span className="text-sm">{video.dislikes}</span>
+            </button>
             <button className="px-4 py-2 bg-gray-200 rounded-full">Share</button>
           </div>
         </div>
@@ -52,7 +64,7 @@ const VideoPlayer = () => {
         {/*  COMMENTS SECTION — empty for now, will add later */}
         <div className="mt-6">
           <h2 className="text-lg font-bold mb-2">Comments</h2>
-          <p className="text-gray-500">Comment system will be added in next step.</p>
+          <p className="text-gray-500"></p>
         </div>
 
       </div>

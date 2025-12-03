@@ -1,7 +1,20 @@
 import React from "react";
 import { RxDotFilled } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 
 const VideoCard = ({ video }) => {
+    const navigate = useNavigate();
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+    const handleClick = () => {
+        if (!isLoggedIn) {
+        alert("Please sign in to watch the video!");
+        navigate("/login");
+        } else {
+        navigate(`/video/${video.id}`);
+        }
+    };
+
     const formatViews = (num) => {
         if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + "B views";
         if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M views";
@@ -11,16 +24,8 @@ const VideoCard = ({ video }) => {
 
     return (
         <div
-            className="
-                cursor-pointer 
-                w-full max-w-lg 
-                p-3 
-                rounded-xl 
-                transition-all 
-                duration-200 
-                hover:bg-gray-200 dark:hover:bg-[#272727]
-            "
-        >
+      onClick={handleClick}
+      className="cursor-pointer w-full max-w-lg p-3 rounded-xl transition-all duration-200 hover:bg-gray-200">
             {/* Thumbnail */}
             <div className="relative">
             <img

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
-import { Link, useNavigate } from "react-router-dom"; // ✅ important: navigate imported
+import { Link, useNavigate } from "react-router-dom"; 
 
 const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect }) => {
   
@@ -40,8 +40,12 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
   const [showLogout, setShowLogout] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("isLoggedIn");
+    const confirmLogout = window.confirm("Do you really want to logout?");
+    if (!confirmLogout) {
+      return; // user canceled → do nothing
+    }
+  
+    localStorage.setItem("isLoggedIn","false");
 
     navigate("/login"); // redirect to login
     window.location.reload(); // force re-render UI
@@ -72,7 +76,7 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
 
           {/* LOGO → If logged in → go home, else go login */}
           <Link
-            to={user ? "/" : "/login"}
+            to="/"
             className="flex items-center gap-1 cursor-pointer"
           >
             <img
