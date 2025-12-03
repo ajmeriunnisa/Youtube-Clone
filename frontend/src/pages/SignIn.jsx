@@ -57,15 +57,20 @@ const SignIn = () => {
 
     // No errors
     setErrors({});
-    console.log("Registered:", { name, email, password });
-    // Save user in localStorage
-    localStorage.setItem("user", JSON.stringify({ name, email, password }));
+    // ---- MULTI-USER SUPPORT ----
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+    
+    // Check if email already exists
+    if (existingUsers.find(u => u.email === email)) {
+      alert("Email already registered. Please login.");
+      return;
+    }
 
-    // initially logged out
+    existingUsers.push({ name, email, password });
+    localStorage.setItem("users", JSON.stringify(existingUsers));
     localStorage.setItem("isLoggedIn", "false");
 
     alert("Account created successfully! Please login.");
-
     navigate("/login");
   };
 

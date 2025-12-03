@@ -5,12 +5,9 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  // search text state
   const [searchQuery, setSearchQuery] = useState("");
-  // category state
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // ON FIRST LOAD → sidebar open on desktop, closed on mobile
   useEffect(() => {
     if (window.innerWidth < 1024) setIsSidebarOpen(false);
     else setIsSidebarOpen(true);
@@ -18,29 +15,29 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
-      {/* ---------------------- HEADER (always at top) ---------------------- */}
-      <Header 
-      onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
-      onSearch={setSearchQuery}
-      selectedCategory={selectedCategory}
-      onCategorySelect={setSelectedCategory}/>
+      {/* Header */}
+      <Header
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        onSearch={setSearchQuery}
+        selectedCategory={selectedCategory}
+        onCategorySelect={setSelectedCategory}
+      />
 
       <div className="flex">
+        {/* Sidebar */}
+        <Sidebar isOpen={isSidebarOpen} />
 
-        {/* ---------------------- SIDEBAR ---------------------- */}
-        <Sidebar isOpen={isSidebarOpen}  />
-
-        {/* ---------------------- MAIN CONTENT ---------------------- */}
+        {/* Main Content */}
         <main
-          className={`
-            flex-1 p-4 transition-all duration-300 ml-0
-            ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}
-          `}
+          className={`flex-1 p-4 transition-all duration-300 ml-0 ${
+            isSidebarOpen ? "lg:ml-56" : "lg:ml-20"
+          }`}
         >
-          <Outlet context={{ searchQuery , selectedCategory }} />
+          <Outlet context={{ 
+            searchQuery: searchQuery, 
+            selectedCategory :selectedCategory
+            }} />
         </main>
-
       </div>
     </div>
   );

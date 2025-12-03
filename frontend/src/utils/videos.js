@@ -10,6 +10,7 @@ const videos = [
     likes: 3200,
     dislikes: 120,
     description: "This is a beginner-friendly React tutorial covering hooks and components.",
+    category: "Education",
     comments: [
       { id: "c1", user: "Maya Singh", text: "Super helpful explanation!", date: "2024-11-10" },
       { id: "c2", user: "Aarav", text: "Thanks for this tutorial!", date: "2024-11-11" }
@@ -27,6 +28,7 @@ const videos = [
     likes: 2100,
     dislikes: 45,
     description: "A compilation of the most insane gaming highlights of the year.",
+    category: "Gaming",
     comments: [
       { id: "c3", user: "Farhan", text: "Bro that last clip was insane!", date: "2024-10-01" }
     ]
@@ -43,6 +45,7 @@ const videos = [
     likes: 1400,
     dislikes: 22,
     description: "Learn Node.js from scratch with real-world examples and APIs.",
+    category: "Software",
     comments: []
   },
 
@@ -57,6 +60,7 @@ const videos = [
     likes: 980,
     dislikes: 18,
     description: "A complete comparison of CSS Grid and Flexbox with examples.",
+    category: "Education",
     comments: [
       { id: "c4", user: "Riya", text: "Finally someone explained it simply!", date: "2024-10-12" }
     ]
@@ -73,6 +77,7 @@ const videos = [
     likes: 5200,
     dislikes: 80,
     description: "A deep dive into closures, lexical scope, and the JavaScript runtime.",
+    category: "Education",
     comments: []
   },
 
@@ -87,6 +92,7 @@ const videos = [
     likes: 6400,
     dislikes: 120,
     description: "A showcase of AI tools that boost productivity and coding efficiency.",
+    category: "Technology",
     comments: [
       { id: "c5", user: "Sam", text: "This saved me hours of work!", date: "2024-11-05" }
     ]
@@ -103,6 +109,7 @@ const videos = [
     likes: 4100,
     dislikes: 60,
     description: "A simple explanation of how processors execute instructions.",
+    category: "Technology",
     comments: []
   },
 
@@ -117,6 +124,7 @@ const videos = [
     likes: 1500,
     dislikes: 32,
     description: "A look inside a high-end gaming setup with RGB lighting and accessories.",
+    category: "Gaming",
     comments: []
   },
 
@@ -131,6 +139,7 @@ const videos = [
     likes: 3500,
     dislikes: 55,
     description: "A fast and efficient tutorial to build a modern portfolio website.",
+    category: "Software",
     comments: []
   },
 
@@ -145,6 +154,7 @@ const videos = [
     likes: 780,
     dislikes: 12,
     description: "Learn key principles when designing dark mode user interfaces.",
+    category: "Design",
     comments: []
   }
 ];

@@ -19,17 +19,25 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
      LOGIN STATUS FROM LOCAL STORAGE
   ---------------------------------------------------*/
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  // Initialize user immediately from localStorage
+const [user, setUser] = useState(() => {
+  const savedUser = JSON.parse(localStorage.getItem("user"));
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  return isLoggedIn && savedUser ? savedUser : null;
+});
 
-  useEffect(() => {
-    // Get login status + user data once on load
+// Listen for login events 
+useEffect(() => {
+  const handleLogin = () => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const userData = JSON.parse(localStorage.getItem("user"));
+    if (isLoggedIn && savedUser) setUser(savedUser);
+  };
 
-    if (isLoggedIn && userData) {
-      setUser(userData);
-    }
-  }, []);
+  window.addEventListener("login", handleLogin);
+  return () => window.removeEventListener("login", handleLogin);
+}, []);
+
 
   /* -------------------------------------------------
      LOGOUT FUNCTIONALITY
@@ -47,8 +55,8 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
   
     localStorage.setItem("isLoggedIn","false");
 
-    navigate("/login"); // redirect to login
-    window.location.reload(); // force re-render UI
+    navigate("/"); // redirect to login
+    window.location.reload(); 
   };
 
   return (
@@ -78,6 +86,9 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
           <Link
             to="/"
             className="flex items-center gap-1 cursor-pointer"
+            onClick={() =>{
+              setSearchText("")
+             onSearch("")} }
           >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"

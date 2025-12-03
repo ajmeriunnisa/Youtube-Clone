@@ -22,7 +22,9 @@ const FilterBar = ({ selectedCategory, onCategorySelect }) => {
         return (
           <button
             key={index}
-            onClick={() => onCategorySelect(category)}
+            onClick={() => {onCategorySelect(category);
+              if (category === "All") onSearch("");
+            }}
             className={`shrink-0 px-4 py-1 rounded-full text-sm transition cursor-pointer
               ${isActive ? "bg-black text-white" : "bg-gray-100 hover:bg-gray-200"}
             `}

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import videos from "../utils/videos"; 
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import Comment from "../components/Comment";
-
+import { FaShare } from "react-icons/fa";
 
 const VideoPlayer = () => {
   //  Get video ID from URL
@@ -86,30 +86,41 @@ const [errorMsg, setErrorMsg] = useState("");
         <h1 className="text-xl font-semibold mt-3">{video.title}</h1>
 
         {/* CHANNEL + LIKE/DISLIKE SECTION */}
-        <div className="flex justify-between items-center mt-4">
-          {/* Channel Info */}
-          <div>
-            <p className="font-bold text-gray-800">{video.channel}</p>
-            <p className="text-sm text-gray-500">{video.views} • {video.uploadDate}</p>
-          </div>
+<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 gap-6">
+  {/* Channel Info + Subscribe */}
+  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <div>
+      <p className="font-bold text-gray-800 text-base sm:text-lg">{video.channelName}</p>
+      <p className="text-sm text-gray-500">{video.views} • {video.uploadDate}</p>
+    </div>
 
-          {/* Action buttons section (Static buttons) */}
-          <div className="flex items-center gap-3">
+    {/* STATIC SUBSCRIBE BUTTON */}
+    <button className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors text-sm sm:text-base">
+      Subscribe
+    </button>
+  </div>
 
-            {/* LIKE BUTTON */}
-            <button className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200 transition">
-                <AiOutlineLike className="text-xl text-gray-700" />
-                <span className="text-sm">{video.likes}</span>
-            </button>
+  {/* Action buttons section (Static buttons) */}
+  <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-0">
+    {/* LIKE BUTTON */}
+    <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors text-sm sm:text-base">
+        <AiOutlineLike className="text-xl text-gray-700" />
+        <span>{video.likes}</span>
+    </button>
 
-            {/* DISLIKE BUTTON */}
-            <button className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200 transition">
-                <AiOutlineDislike className="text-xl text-gray-700" />
-                <span className="text-sm">{video.dislikes}</span>
-            </button>
-            <button className="px-4 py-2 bg-gray-200 rounded-full">Share</button>
-          </div>
-        </div>
+    {/* DISLIKE BUTTON */}
+    <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors text-sm sm:text-base">
+        <AiOutlineDislike className="text-xl text-gray-700" />
+        <span>{video.dislikes}</span>
+    </button>
+
+    {/* SHARE BUTTON */}
+    <button className="flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-full hover:bg-gray-300 transition-colors text-sm sm:text-base">
+        <FaShare className="text-lg text-gray-700" />
+        Share
+    </button>
+  </div>
+</div>
 
         {/* DESCRIPTION */}
         <div className="mt-4 p-3 bg-gray-100 rounded-lg">

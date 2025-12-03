@@ -8,7 +8,6 @@ const Login = () => {
 
   // State for validation errors
   const [errors, setErrors] = useState({});
-
   const navigate = useNavigate();
 
   // Handle Form Submit
@@ -39,16 +38,20 @@ const Login = () => {
 
     // If no errors
     setErrors({});
-    // console.log("Form Submitted:", { email, password });
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    if (!savedUser || savedUser.email !== email || savedUser.password !== password) {
-    alert("Invalid email or password");
-    return;
-}
 
-    // If credentials match → login success
+    // ---- MULTI-USER SUPPORT ----
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const matchedUser = users.find(u => u.email === email && u.password === password);
+
+    if (!matchedUser) {
+      alert("Invalid email or password");
+      return;
+    }
+
+    // Login success
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("user", JSON.stringify(matchedUser));
+    window.dispatchEvent(new Event("login"));
     navigate("/");
   };
 
