@@ -1,60 +1,99 @@
 import React, { useEffect, useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ important: navigate imported
 
-const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelect}) => {
-
-  const [searchText, setSearchText] = useState(""); // Search state
+const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect }) => {
+  
+  /* -------------------------------------------------
+     SEARCH STATE + HANDLER
+  ---------------------------------------------------*/
+  const [searchText, setSearchText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch(searchText.trim());
   };
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  /* -------------------------------------------------
+     LOGIN STATUS FROM LOCAL STORAGE
+  ---------------------------------------------------*/
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    // Get login status + user data once on load
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     const userData = JSON.parse(localStorage.getItem("user"));
-    if (isLoggedIn === "true" && userData) {
+
+    if (isLoggedIn && userData) {
       setUser(userData);
     }
   }, []);
 
+  /* -------------------------------------------------
+     LOGOUT FUNCTIONALITY
+     - Remove user from storage
+     - Navigate to login
+     - Reload UI
+  ---------------------------------------------------*/
+  const [showLogout, setShowLogout] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("isLoggedIn");
+
+    navigate("/login"); // redirect to login
+    window.location.reload(); // force re-render UI
+  };
 
   return (
     <>
+      {/* -------------------------------------------------
+         HEADER SECTION
+      ---------------------------------------------------*/}
       <header
         className="
-        w-full h-18 px-4 flex items-center justify-between 
-        bg-white border-b border-gray-200 sticky top-0 z-50
-      "
+          w-full h-18 px-4 flex items-center justify-between 
+          bg-white border-b border-gray-200 sticky top-0 z-50
+        "
       >
-        {/* LEFT SECTION — Hamburger + Logo */}
+        {/* LEFT SIDE — HAMBURGER + LOGO */}
         <div className="flex items-center gap-3">
-          {/* Hamburger button */}
+
+          {/* Hamburger Button */}
           <button
             onClick={onToggleSidebar}
             aria-label="Toggle menu"
-            className="
-            p-2 rounded-md hover:bg-gray-200 transition
-          "
+            className="p-2 rounded-md hover:bg-gray-200 transition"
           >
             <FiMenu className="text-xl" />
           </button>
 
-          {/* LOGO */}
-          <Link to={isLoggedIn ? "/" : "/login"} className="flex items-center gap-1 cursor-pointer">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="logo" className="h-5 md:h-6" />
+          {/* LOGO → If logged in → go home, else go login */}
+          <Link
+            to={user ? "/" : "/login"}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+              alt="YouTube Logo"
+              className="h-5 md:h-6"
+            />
           </Link>
         </div>
 
-        {/* SEARCH BAR */}
+        {/* -------------------------------------------------
+           SEARCH BAR
+        ---------------------------------------------------*/}
         <form
           onSubmit={handleSubmit}
-          className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300"
+          className="
+            hidden sm:flex items-center 
+            bg-gray-100 rounded-full px-3 py-1 w-[40%] 
+            transition-all duration-200 
+            focus-within:ring-2 focus-within:ring-blue-300
+          "
         >
           <input
             type="text"
@@ -72,38 +111,67 @@ const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelec
           </button>
         </form>
 
-
-        {/* RIGHT SECTION — Notification + Profile */}
+        {/* -------------------------------------------------
+           RIGHT SIDE — BELL + PROFILE OR SIGN IN
+        ---------------------------------------------------*/}
         <div className="flex items-center gap-4">
-          {/* Notification bell */}
+
+          {/* Notification Bell */}
           <button className="p-2 rounded-md hover:bg-gray-200 transition">
             <FiBell className="text-lg" />
           </button>
 
-          {/* Profile / Sign in */}
+          {/* If user logged in → show profile badge */}
           {user ? (
-          // PROFILE BADGE
-          <div
-            onClick={() => navigate("/profile")}
-            className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold cursor-pointer"
-          >
-            {user.name.charAt(0).toUpperCase()}
-          </div>
-        ) : (
-          // SIGN IN BUTTON
-          <button
-            onClick={() => navigate("/login")}
-            className="px-4 py-1 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition"
-          >
-            Sign In
-          </button>
-        )}
+            <div className="relative">
+              <div
+                onClick={() => setShowLogout(!showLogout)}
+                className="
+                  w-9 h-9 rounded-full 
+                  bg-red-600 text-white 
+                  flex items-center justify-center 
+                  cursor-pointer uppercase
+                "
+              >
+                {user.name[0]}
+              </div>
 
+              {/* Logout Dropdown */}
+              {showLogout && (
+                <button
+                  onClick={handleLogout}
+                  className="
+                    absolute right-0 mt-2 
+                    bg-white border rounded px-3 py-2 
+                    shadow hover:bg-gray-100 text-sm
+                  "
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          ) : (
+            // If NOT logged in → show Sign In button
+            <Link
+              to="/login"
+              className="
+                flex items-center gap-2 
+                bg-blue-600 text-white text-sm 
+                px-3 py-1.5 rounded-md 
+                hover:bg-blue-700 transition
+              "
+            >
+              <FiUser /> Sign in
+            </Link>
+          )}
         </div>
       </header>
-      {/* FILTER BAR BELOW HEADER */}
+
+      {/* -------------------------------------------------
+         FILTER BAR BELOW HEADER
+      ---------------------------------------------------*/}
       <div className="w-full bg-white sticky top-16 z-40 border-b">
-        <FilterBar 
+        <FilterBar
           selectedCategory={selectedCategory}
           onCategorySelect={onCategorySelect}
         />
