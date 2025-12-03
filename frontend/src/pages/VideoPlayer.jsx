@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import videos from "../utils/videos"; 
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import Comment from "../components/Comment";
 
 
 const VideoPlayer = () => {
@@ -14,6 +15,60 @@ const VideoPlayer = () => {
   if (!video) {
     return <div className="p-4">Video not found</div>;
   }
+
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  // COMMENT INPUT STATE
+  const [commentText, setCommentText] = useState("");
+
+  // COMMENTS LIST STATE
+  const [comments, setComments] = useState(() => {
+  const saved = localStorage.getItem(`comments_${id}`);
+  return saved ? JSON.parse(saved) : [];
+});
+
+useEffect(() => {
+  localStorage.setItem(`comments_${id}`, JSON.stringify(comments));
+}, [comments, id]);
+
+//Error State
+const [errorMsg, setErrorMsg] = useState("");
+
+    // ADD COMMENT
+  const handleAddComment = () => {
+  if (commentText.trim() === "") {
+    setErrorMsg("Comment cannot be empty!");
+    return;
+  }
+
+  setErrorMsg(""); // clear error on success
+
+  const newComment = {
+    id: Date.now(),
+    userName: currentUser.name,
+    userEmail: currentUser.email,
+    text: commentText,
+  };
+
+  setComments([newComment, ...comments]);
+  setCommentText("");
+};
+
+
+  // DELETE COMMENT
+  const handleDeleteComment = (id) => {
+    setComments(comments.filter((c) => c.id !== id));
+  };
+
+  // UPDATE COMMENT
+  const handleUpdateComment = (id, newText) => {
+    setComments(
+      comments.map((c) =>
+        c.id === id ? { ...c, text: newText } : c
+      )
+    );
+  };
+
 
   return (
     <div className="flex gap-6 p-4">
@@ -61,11 +116,40 @@ const VideoPlayer = () => {
           <p className="text-gray-700 text-sm">{video.description}</p>
         </div>
 
-        {/*  COMMENTS SECTION — empty for now, will add later */}
-        <div className="mt-6">
-          <h2 className="text-lg font-bold mb-2">Comments</h2>
-          <p className="text-gray-500"></p>
-        </div>
+        {/*  COMMENTS SECTION */}
+          <div className="mt-6">
+            <h2 className="text-lg font-bold mb-3">Comments</h2>
+
+            {/* Comment Input */}
+            <div className="flex gap-3 mb-4">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Add a public comment..."
+                className="flex-1 border p-2 rounded-md"
+              />
+              <button
+                onClick={handleAddComment}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer"
+              >
+                Post
+              </button>
+            </div>
+            {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+
+
+            {/* Render Comments */}
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                currentUser={currentUser}
+                onDelete={handleDeleteComment}
+                onUpdate={handleUpdateComment}
+              />
+            ))}
+          </div>
 
       </div>
 
@@ -74,7 +158,7 @@ const VideoPlayer = () => {
         <h2 className="text-lg font-bold mb-3">Suggested Videos</h2>
 
         {/* Placeholder for suggestions */}
-        <p className="text-gray-500">Suggested videos will be added next.</p>
+        <p className="text-gray-500">Suggested videos will be added here.</p>
       </div>
 
     </div>
