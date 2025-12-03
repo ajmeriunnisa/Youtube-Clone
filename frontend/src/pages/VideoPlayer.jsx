@@ -4,6 +4,7 @@ import videos from "../utils/videos";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import Comment from "../components/Comment";
 import { FaShare } from "react-icons/fa";
+import SuggestedList from "../components/SuggestedList";
 
 const VideoPlayer = () => {
   //  Get video ID from URL
@@ -71,34 +72,34 @@ const [errorMsg, setErrorMsg] = useState("");
 
 
   return (
-    <div className="flex gap-6 p-4">
+    <div className="w-full flex flex-col lg:flex-row gap-6 p-4">
       {/* LEFT SECTION — VIDEO PLAYER + DETAILS */}
-      <div className="w-[70%]">
+      <div className="flex-1 min-w-0">
 
         {/* VIDEO PLAYER */}
         <video
           controls
           src={video.videoUrl}
-          className="w-full rounded-lg"
+          className="w-full rounded-lg "
         />
 
         {/*  VIDEO TITLE */}
         <h1 className="text-xl font-semibold mt-3">{video.title}</h1>
 
         {/* CHANNEL + LIKE/DISLIKE SECTION */}
-<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 gap-6">
-  {/* Channel Info + Subscribe */}
-  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-    <div>
-      <p className="font-bold text-gray-800 text-base sm:text-lg">{video.channelName}</p>
-      <p className="text-sm text-gray-500">{video.views} • {video.uploadDate}</p>
-    </div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 gap-6">
+        {/* Channel Info + Subscribe */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div>
+            <p className="font-bold text-gray-800 text-base sm:text-lg">{video.channelName}</p>
+            <p className="text-sm text-gray-500">{video.views} • {video.uploadDate}</p>
+          </div>
 
-    {/* STATIC SUBSCRIBE BUTTON */}
-    <button className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors text-sm sm:text-base">
-      Subscribe
-    </button>
-  </div>
+          {/* STATIC SUBSCRIBE BUTTON */}
+          <button className="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors text-sm sm:text-base">
+            Subscribe
+          </button>
+        </div>
 
   {/* Action buttons section (Static buttons) */}
   <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-0">
@@ -165,11 +166,15 @@ const [errorMsg, setErrorMsg] = useState("");
       </div>
 
       {/* RIGHT SECTION — Suggested Videos */}
-      <div className="w-[30%]">
+      <div className="w-full lg:w-1/3 shrink-0">
         <h2 className="text-lg font-bold mb-3">Suggested Videos</h2>
 
-        {/* Placeholder for suggestions */}
-        <p className="text-gray-500">Suggested videos will be added here.</p>
+        {/* SuggestedList component */}
+        <SuggestedList
+          videos={videos}    
+          currentId={id}
+          limit={6}
+        />
       </div>
 
     </div>

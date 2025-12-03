@@ -1,5 +1,6 @@
 import React from "react";
 import { FiHome, FiCompass, FiYoutube, FiClock, FiThumbsUp, FiPlay, FiList, FiTrendingUp } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Sidebar = ({ isOpen }) => {
   return (
@@ -15,9 +16,11 @@ const Sidebar = ({ isOpen }) => {
     >
       <nav className="p-4 flex flex-col gap-2 text-sm text-left">
         {/* Top section */}
+        <Link to="/">
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
           <FiHome /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Home</span>
         </div>
+        </Link>
 
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md" >
           <FiCompass /> <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Explore</span>
