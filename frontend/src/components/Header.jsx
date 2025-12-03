@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
 import { Link } from "react-router-dom";
@@ -13,6 +13,16 @@ const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelec
   };
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (isLoggedIn === "true" && userData) {
+      setUser(userData);
+    }
+  }, []);
+
 
   return (
     <>
@@ -71,16 +81,24 @@ const Header = ({ onToggleSidebar , onSearch , selectedCategory, onCategorySelec
           </button>
 
           {/* Profile / Sign in */}
-          <button
-            className="
-            flex items-center gap-2 
-            bg-blue-600 text-white text-sm 
-            px-3 py-1.5 rounded-md 
-            hover:bg-blue-700 transition
-          "
+          {user ? (
+          // PROFILE BADGE
+          <div
+            onClick={() => navigate("/profile")}
+            className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold cursor-pointer"
           >
-            <FiUser /> Sign in
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+        ) : (
+          // SIGN IN BUTTON
+          <button
+            onClick={() => navigate("/login")}
+            className="px-4 py-1 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition"
+          >
+            Sign In
           </button>
+        )}
+
         </div>
       </header>
       {/* FILTER BAR BELOW HEADER */}

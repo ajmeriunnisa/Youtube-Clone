@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useVideos from "../hooks/useVideos"; // custom hook to fetch sample videos
 import VideoCard from "../components/VideoCard";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const Home = () => {
     const { searchQuery , selectedCategory } = useOutletContext();
@@ -20,6 +20,17 @@ const Home = () => {
         : byCategory.filter((video) =>
             video.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
         );
+
+        const navigate = useNavigate();
+
+        useEffect(() => {
+        const loggedIn = localStorage.getItem("isLoggedIn");
+
+        if (loggedIn !== "true") {
+            navigate("/login");
+        }
+        }, []);
+
     return (
         <div className="px-4 mt-4">
 
