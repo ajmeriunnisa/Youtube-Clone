@@ -30,16 +30,15 @@ const CreateChannel = () => {
       description,
       ownerEmail: user.email,
       subscribers: 0,
-      banner: banner || "https://via.placeholder.com/1200x400",
-      profileImage: profileImage || "https://via.placeholder.com/150",
+      banner: banner,
+      profileImage: profileImage,
       createdAt: new Date().toISOString(),
       videos: []
     };
 
-    localStorage.setItem("channel", JSON.stringify(newChannel));
+    localStorage.setItem(`channel_${user.email}`, JSON.stringify(newChannel));
 
     alert("Channel created successfully!");
-
     navigate("/channel");
   };
 

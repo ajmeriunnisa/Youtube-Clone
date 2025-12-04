@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const UploadVideo = () => {
   const navigate = useNavigate();
-  const channel = JSON.parse(localStorage.getItem("channel"));
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const key = `channel_${user.email}`;
+ const channel = user
+    ? JSON.parse(localStorage.getItem(`channel_${user.email}`))
+    : null;
+  
   const [videoData, setVideoData] = useState({
     title: "",
     description: "",
@@ -14,7 +17,7 @@ const UploadVideo = () => {
     duration: "",
   });
 
-  if (!channel) {
+  if (!user || !channel) {
     return (
       <div className="p-6 text-center">
         <h2 className="text-xl font-semibold">No Channel Found</h2>

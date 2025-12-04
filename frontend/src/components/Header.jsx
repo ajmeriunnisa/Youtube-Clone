@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
 import FilterBar from "./FilterBar";
 import { Link, useNavigate } from "react-router-dom"; 
@@ -25,6 +25,23 @@ const [user, setUser] = useState(() => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   return isLoggedIn && savedUser ? savedUser : null;
 });
+
+// Ref for dropdown to detect outside click
+  const dropdownRef = useRef(null);
+
+  // Click outside listener
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowLogout(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
 // Listen for login events 
 useEffect(() => {
@@ -59,9 +76,8 @@ useEffect(() => {
     window.location.reload(); 
   };
 
-  const channel = JSON.parse(localStorage.getItem("channel"));
-
-
+  const channelKey = user ? `channel_${user.email}` : null;
+  const channel = channelKey ? JSON.parse(localStorage.getItem(channelKey)) : null;
   return (
     <>
       {/* -------------------------------------------------
@@ -157,7 +173,7 @@ useEffect(() => {
 
           {/* If user logged in → show profile badge */}
           {user ? (
-            <div className="relative">
+            <div ref={dropdownRef} className="relative">
               <div
                 onClick={() => setShowLogout(!showLogout)}
                 className="

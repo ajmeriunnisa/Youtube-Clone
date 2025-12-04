@@ -17,19 +17,24 @@ const ChannelContent = ({
     <>
       {/* Banner */}
       <div className="w-full h-48 md:h-60 bg-gray-200">
-        <img
-          src={channel.banner}
-          className="w-full h-full object-cover"
-          onError={(e) => (e.target.src = "https://via.placeholder.com/1200x400")}
-        />
+        {channel.banner && (
+            <img
+            src={channel.banner}
+            className="w-full h-full object-cover"
+            alt="Channel Banner"
+            />
+        )}
       </div>
 
       {/* Header Section */}
       <div className="px-4 md:px-8 mt-4 flex gap-4">
+        {channel.profileImage && (
         <img
-          src={channel.profileImage}
-          className="w-20 h-20 md:w-24 md:h-24 rounded-full border shadow-sm"
+            src={channel.profileImage}
+            className="w-20 h-20 md:w-24 md:h-24 rounded-full border shadow-sm"
+            alt="Profile"
         />
+        )}
 
         <div className="flex flex-col">
           <h2 className="text-2xl md:text-3xl font-bold">{channel.channelName}</h2>

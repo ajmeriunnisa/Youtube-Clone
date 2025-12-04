@@ -6,24 +6,25 @@ import ChannelContent from "../components/ChannelContent";
 import EditVideoModal from "../components/EditVideoModal";
 
 const Channel = () => {
-  const [channel, setChannel] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+
+  // Safe channel initialization using lazy state
+  const [channel] = useState(() => {
+    if (!user) return null;
+    const key = `channel_${user.email}`;
+    return JSON.parse(localStorage.getItem(key));
+  });
+
   const [activeTab, setActiveTab] = useState("Videos");
 
-  // Edit Modal States
+  // Edit modal states
   const [editingVideo, setEditingVideo] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editThumbnail, setEditThumbnail] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
-
-  // Load channel
-  useEffect(() => {
-    setChannel(JSON.parse(localStorage.getItem("channel")));
-  }, []);
-
-  if (!channel) {
+  if (!user || !channel) {
     return (
       <div className="p-6 text-center">
         <h2>No Channel Found</h2>
