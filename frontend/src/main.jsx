@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx'
 import SignIn from './pages/SignIn.jsx'
 import VideoPlayer from './pages/VideoPlayer.jsx'
 import CreateChannel from './components/CreateChannel.jsx'
+import Channel from './pages/Channel.jsx'
 
 const appRouter = createBrowserRouter([
   {
@@ -29,9 +30,14 @@ const appRouter = createBrowserRouter([
       {
         path:"/video/:id",
         element:<VideoPlayer/>
-      },{
+      },
+      {
         path:"/create-channel",
         element:<CreateChannel/>
+      },
+      {
+        path:"/channel",
+        element:<Channel/>
       }
     ]
   },
