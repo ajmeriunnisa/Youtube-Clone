@@ -39,6 +39,19 @@ const channelVideos = allVideos.filter(
       .replace(/ /g, "")
       .replace(/[^a-z0-9]/g, "");
 
+      //Delete Video
+      const handleDeleteVideo = (id) => {
+        const storedVideos = JSON.parse(localStorage.getItem("videos")) || [];
+
+        const updated = storedVideos.filter((v) => v.id !== id);
+
+        localStorage.setItem("videos", JSON.stringify(updated));
+
+        // Refresh UI
+        window.location.reload();
+        };
+
+
   return (
     <div className="w-full pb-10">
 
@@ -126,23 +139,21 @@ const channelVideos = allVideos.filter(
                   {/* Edit/Delete only for video owner */}
                   {video.userEmail === user?.email && (
                     <div className="flex gap-3 text-xs mt-1">
-                      <button className="text-blue-600">Edit</button>
-                      <button className="text-red-600">Delete</button>
+                        <button className="text-blue-600">Edit</button>
+
+                        <button
+                        className="text-red-600"
+                        onClick={() => handleDeleteVideo(video.id)}
+                        >
+                        Delete
+                        </button>
                     </div>
-                  )}
+                    )}
                 </div>
               ))
             )}
           </div>
         )}
-
-        {/* Other Tabs Static Content */}
-        {activeTab !== "Videos" && (
-          <div className="text-gray-500 text-center py-6">
-            This section is static for now.
-          </div>
-        )}
-
       </div>
     </div>
   );
