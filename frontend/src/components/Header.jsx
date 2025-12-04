@@ -59,6 +59,9 @@ useEffect(() => {
     window.location.reload(); 
   };
 
+  const channel = JSON.parse(localStorage.getItem("channel"));
+
+
   return (
     <>
       {/* -------------------------------------------------
@@ -126,6 +129,22 @@ useEffect(() => {
           </button>
         </form>
 
+        {/* CREATE CHANNEL BUTTON */}
+          <button
+            onClick={() => {
+              if (!user) {
+                alert("Please sign in to create a channel");
+                return;
+              }
+              navigate("/create-channel");
+            }}
+            className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 ${
+              channel ? "hidden" : ""
+            }`}
+          >
+            Create Channel
+          </button>
+
         {/* -------------------------------------------------
            RIGHT SIDE — BELL + PROFILE OR SIGN IN
         ---------------------------------------------------*/}
@@ -153,17 +172,36 @@ useEffect(() => {
 
               {/* Logout Dropdown */}
               {showLogout && (
-                <button
-                  onClick={handleLogout}
-                  className="
-                    absolute right-0 mt-2 
-                    bg-white border rounded px-3 py-2 
-                    shadow hover:bg-gray-100 text-sm
-                  "
-                >
-                  Logout
-                </button>
-              )}
+  <div
+    className="
+      absolute right-0 mt-2 
+      bg-white border rounded shadow text-sm w-40
+    "
+  >
+    {/* USER NAME */}
+    <p className="px-3 py-2 font-semibold text-gray-700">
+      {user.name}
+    </p>
+
+    {/* VIEW YOUR CHANNEL — Only if channel exists */}
+    {channel && (
+      <div
+        onClick={() => navigate("/channel")}
+        className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+      >
+        View Your Channel
+      </div>
+    )}
+
+    {/* LOGOUT */}
+    <div
+      onClick={handleLogout}
+      className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-red-600"
+    >
+      Logout
+    </div>
+  </div>
+)}
             </div>
           ) : (
             // If NOT logged in → show Sign In button
