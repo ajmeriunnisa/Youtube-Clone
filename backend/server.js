@@ -1,11 +1,19 @@
 import express from "express";
+import connectDB from "./config/db.js";
 
 const app=new express();
 
-//Middleware to parse JSON request body
+// -----------------------
+//  CONNECT DATABASE
+// -----------------------
+connectDB();
+
+// -----------------------
+//  MIDDLEWARE
+// -----------------------
 app.use(express.json());
 
-// Default route just to test server
+// Test rote
 app.get("/", (req, res) => {
   res.send("Backend server is running...");
 });
