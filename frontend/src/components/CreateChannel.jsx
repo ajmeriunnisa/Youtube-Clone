@@ -6,59 +6,93 @@ const CreateChannel = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [channelName, setChannelName] = useState("");
-  const [error, setError] = useState("");
+  const [description, setDescription] = useState("");
+  const [banner, setBanner] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+
+  if (!user) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-2xl font-semibold">Please log in to create a channel</h2>
+      </div>
+    );
+  }
 
   const handleCreate = () => {
     if (!channelName.trim()) {
-      setError("Channel name cannot be empty");
+      alert("Channel name is required!");
       return;
     }
 
     const newChannel = {
-      id: Date.now(),
-      name: channelName,
-      owner: user.email,
+      channelId: "ch_" + Date.now(),
+      channelName,
+      description,
+      ownerEmail: user.email,
+      subscribers: 0,
+      banner: banner || "https://via.placeholder.com/1200x400",
+      profileImage: profileImage || "https://via.placeholder.com/150",
       createdAt: new Date().toISOString(),
+      videos: []
     };
 
     localStorage.setItem("channel", JSON.stringify(newChannel));
+
+    alert("Channel created successfully!");
+
     navigate("/channel");
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white w-full max-w-md p-8 rounded-xl shadow-xl border">
-        
-        {/* PROFILE PREVIEW */}
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-red-600 text-white flex items-center justify-center text-3xl font-bold uppercase">
-            {user?.name[0]}
-          </div>
-          <p className="text-gray-500 text-sm mt-2">Logged in as {user?.email}</p>
+    <div className="max-w-xl mx-auto p-6">
+      <h2 className="text-3xl font-bold mb-6 text-center">Create Your Channel</h2>
+
+      <div className="space-y-4">
+
+        <div>
+          <label className="block font-medium mb-1">Channel Name</label>
+          <input
+            type="text"
+            value={channelName}
+            onChange={(e) => setChannelName(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+          />
         </div>
 
-        <h1 className="text-2xl font-bold text-center mb-4">Create your channel</h1>
+        <div>
+          <label className="block font-medium mb-1">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md h-24"
+          />
+        </div>
 
-        <p className="text-gray-600 text-center mb-6">
-          Your channel name will be shown publicly across YouTube.
-        </p>
+        <div>
+          <label className="block font-medium mb-1">Banner Image URL</label>
+          <input
+            type="text"
+            placeholder="Optional"
+            value={banner}
+            onChange={(e) => setBanner(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
 
-        {/* INPUT */}
-        <label className="text-sm font-medium">Channel Name</label>
-        <input
-          type="text"
-          value={channelName}
-          onChange={(e) => setChannelName(e.target.value)}
-          placeholder="Enter channel name"
-          className="w-full mt-2 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div>
+          <label className="block font-medium mb-1">Profile Image URL</label>
+          <input
+            type="text"
+            placeholder="Optional"
+            value={profileImage}
+            onChange={(e) => setProfileImage(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
 
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
-        {/* BUTTON */}
         <button
           onClick={handleCreate}
-          className="w-full mt-6 bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded-md text-lg hover:bg-blue-700"
         >
           Create Channel
         </button>

@@ -1,67 +1,146 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import videos from "../utils/videos.js";
+import { useNavigate } from "react-router-dom";
 
 const Channel = () => {
+  const [channel, setChannel] = useState(null);
+  const [activeTab, setActiveTab] = useState("Videos");
   const user = JSON.parse(localStorage.getItem("user"));
-  const channel = JSON.parse(localStorage.getItem("channel"));
-  const videos = JSON.parse(localStorage.getItem("videos")) || [];
+  const navigate=useNavigate();
 
-  if (!channel || !user) {
+  useEffect(() => {
+    const savedChannel = JSON.parse(localStorage.getItem("channel"));
+    setChannel(savedChannel);
+  }, []);
+
+  if (!channel) {
     return (
-      <div className="p-10 text-center text-xl text-gray-500">
-        No channel found. Please create your channel.
+      <div className="p-6 text-center">
+        <h2 className="text-xl font-semibold">No Channel Found</h2>
+        <p className="text-gray-600 mt-2">Please create your channel first.</p>
       </div>
     );
   }
 
-  const myVideos = videos.filter(v => v.channelId === channel.id);
+ // fetch videos from both sample data AND localStorage
+const storedVideos = JSON.parse(localStorage.getItem("videos")) || [];
+
+const allVideos = [...videos, ...storedVideos];
+
+const channelVideos = allVideos.filter(
+  (video) => video.channelId === channel.channelId
+);
+
+
+  // create channel handle (@username)
+  const channelHandle = "@" +
+    user?.name
+      .toLowerCase()
+      .replace(/ /g, "")
+      .replace(/[^a-z0-9]/g, "");
 
   return (
-    <div className="w-full">
-      {/* BANNER */}
-      <div className="w-full h-48 bg-linear-to-r from-red-500 to-blue-600"></div>
+    <div className="w-full pb-10">
 
-      {/* CHANNEL HEADER */}
-      <div className="px-6 md:px-16 -mt-16 flex items-start gap-6">
-        {/* BIG PROFILE BADGE */}
-        <div className="w-32 h-32 bg-red-600 rounded-full border-4 border-white shadow-xl flex items-center justify-center text-5xl text-white font-bold uppercase">
-          {user.name[0]}
-        </div>
+      {/* Banner */}
+      <div className="w-full h-48 md:h-60 bg-gray-200">
+        <img
+          src={channel.banner}
+          onError={(e) => (e.target.src = "https://via.placeholder.com/1200x400")}
+          className="w-full h-full object-cover"
+          alt="Channel Banner"
+        />
+      </div>
 
-        <div className="mt-15">
-          <h1 className="text-3xl font-bold">{channel.name}</h1>
-          <p className="text-gray-800">{user.email}</p>
-          <p className="text-gray-500 text-sm mt-1">
-            {myVideos.length} videos • Joined {new Date(channel.createdAt).toLocaleDateString()}
+      {/* Channel Header */}
+      <div className="px-4 md:px-8 mt-4 flex gap-4">
+        <img
+          src={channel.profileImage}
+          onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+          className="w-20 h-20 md:w-24 md:h-24 rounded-full border shadow-sm"
+        />
+
+        <div className="flex flex-col">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            {channel.channelName}
+          </h2>
+
+          <p className="text-gray-600 text-sm">{channelHandle}</p>
+
+          <p className="text-gray-600 text-sm">
+            {channel.subscribers} subscribers • {channelVideos.length} videos •{" "}
+            Joined {new Date(channel.createdAt).toLocaleDateString()}
           </p>
+
+          <button className="mt-2 bg-red-600 text-white px-5 py-1.5 rounded-full text-sm hover:bg-red-700">
+            Subscribe
+          </button>
+
+          {/* Upload Video button */}
+          <button
+            onClick={() => navigate("/upload-video")}
+            className="mt-2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm hover:bg-blue-700 ml-3"
+            >
+            Upload Video
+            </button>
+
         </div>
       </div>
 
-      {/* NAV TABS */}
-      <div className="mt-6 border-b">
-        <div className="flex gap-8 px-6 md:px-16 text-gray-700 font-semibold">
-          <button className="py-3 border-b-2 border-black">Videos</button>
-          <button className="py-3 hover:text-black">Home</button>
-        </div>
+      {/* Tabs */}
+      <div className="mt-6 border-b px-4 md:px-8 flex gap-6 overflow-x-auto text-sm">
+        {["Home", "Videos", "Shorts", "Live", "Playlists", "Community"].map(
+          (tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`
+                pb-2 
+                ${activeTab === tab ? "border-b-2 border-black font-semibold" : "border-transparent"}
+              `}
+            >
+              {tab}
+            </button>
+          )
+        )}
       </div>
 
-      {/* VIDEO GRID */}
-      <div className="px-6 md:px-16 py-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {/* Videos Section */}
+      <div className="px-4 md:px-8 mt-6">
 
-        {myVideos.length === 0 ? (
-          <p className="text-gray-500 text-lg col-span-full">
-            No videos uploaded yet.
-          </p>
-        ) : (
-          myVideos.map((video) => (
-            <div key={video.id} className="cursor-pointer group">
-              <img
-                src={video.thumbnail}
-                className="w-full rounded-lg group-hover:opacity-90 transition"
-              />
-              <h3 className="mt-2 text-sm font-bold">{video.title}</h3>
-              <p className="text-xs text-gray-500">{video.views || "0 views"}</p>
-            </div>
-          ))
+        {activeTab === "Videos" && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+            {channelVideos.length === 0 ? (
+              <p className="text-gray-600">No videos uploaded yet.</p>
+            ) : (
+              channelVideos.map((video) => (
+                <div key={video.id} className="cursor-pointer">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="rounded-lg w-full h-32 sm:h-40 object-cover"
+                  />
+
+                  <h3 className="mt-2 text-sm font-semibold">{video.title}</h3>
+
+                  {/* Edit/Delete only for video owner */}
+                  {video.userEmail === user?.email && (
+                    <div className="flex gap-3 text-xs mt-1">
+                      <button className="text-blue-600">Edit</button>
+                      <button className="text-red-600">Delete</button>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Other Tabs Static Content */}
+        {activeTab !== "Videos" && (
+          <div className="text-gray-500 text-center py-6">
+            This section is static for now.
+          </div>
         )}
 
       </div>
