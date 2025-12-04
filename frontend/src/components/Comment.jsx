@@ -16,27 +16,25 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="p-3 bg-gray-100 rounded-lg mb-3">
-      {/* USER NAME */}
-      <p className="font-semibold text-sm">{comment.userName}</p>
+    <div className="p-3 bg-gray-100 rounded-lg mb-3 flex gap-3">
 
-      {/* COMMENT TEXT OR EDIT INPUT */}
-      {isEditing ? (
-        <textarea
-          value={editedText}
-          onChange={(e) => setEditedText(e.target.value)}
-          className="w-full p-2 border rounded-md mt-2 text-sm"
-        />
-      ) : (
-        <p className="text-gray-700 text-sm mt-1">{comment.text}</p>
-      )}
+  {/* LEFT: USER AVATAR */}
+  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shrink-0">
+    {comment.userName.charAt(0)}
+  </div>
+
+  {/* RIGHT: CONTENT */}
+  <div className="flex-1">
+
+    {/* NAME + ACTIONS */}
+    <div className="flex justify-between items-center">
+      <p className="font-semibold text-sm">{comment.userName}</p>
 
       {/* ACTION BUTTONS */}
       {isOwner && (
-        <div className="flex gap-3 mt-2">
+        <div className="flex gap-3">
           {!isEditing ? (
             <>
-              {/* EDIT BUTTON */}
               <button
                 onClick={() => setIsEditing(true)}
                 className="text-blue-600 text-xs cursor-pointer"
@@ -44,7 +42,6 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
                 Edit
               </button>
 
-              {/* DELETE BUTTON */}
               <button
                 onClick={() => onDelete(comment.id)}
                 className="text-red-600 text-xs cursor-pointer"
@@ -54,7 +51,6 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
             </>
           ) : (
             <>
-              {/* SAVE BUTTON */}
               <button
                 onClick={handleSave}
                 className="text-green-600 text-xs cursor-pointer"
@@ -62,11 +58,10 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
                 Save
               </button>
 
-              {/* CANCEL EDITING */}
               <button
                 onClick={() => {
                   setIsEditing(false);
-                  setEditedText(comment.text); // revert old text
+                  setEditedText(comment.text);
                 }}
                 className="text-gray-600 text-xs cursor-pointer"
               >
@@ -76,6 +71,24 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
           )}
         </div>
       )}
+    </div>
+
+    {/* COMMENT TEXT */}
+    <div className="mt-1">
+      {isEditing ? (
+        <textarea
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+          className="w-full p-2 border rounded-md text-sm"
+        />
+      ) : (
+        <p className="text-gray-700 text-sm">{comment.text}</p>
+      )}
+    </div>
+
+    {/* DATE */}
+    <p className="text-gray-500 text-xs mt-1">{comment.date}</p>
+  </div> 
     </div>
   );
 };
