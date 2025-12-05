@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model.js";
 
@@ -8,7 +8,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"; // token expiry
 /**
  * REGISTER (SIGNUP)
  */
-export const register = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { username, email, password, avatar = "" } = req.body || {};
 
@@ -69,7 +69,7 @@ export const register = async (req, res) => {
 /**
  * LOGIN
  */
-export const login = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body || {};
 

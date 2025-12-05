@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./config/db.js";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import userRoutes from "./routes/user.routes.js";
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Backend server is running...");
 });
+
+// User Routes
+app.use("/api/users", userRoutes);
 
 // -----------------------
 //  SERVER START
