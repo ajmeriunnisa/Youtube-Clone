@@ -44,3 +44,50 @@ export const createVideo = async (req, res) => {
     res.status(500).json({ message: "Server error while uploading video" });
   }
 };
+
+/**
+ * GET ALL VIDEOS
+ */
+export const getAllVideos = async (req, res) => {
+  try {
+    const videos = await VideoModel.find().sort({ createdAt: -1 });
+    return res.json(videos);
+  } catch (err) {
+    console.error("getAllVideos error:", err);
+    res.status(500).json({ message: "Server error fetching videos" });
+  }
+};
+
+/**
+ * GET VIDEO BY ID
+ */
+export const getVideoById = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    return res.json(video);
+  } catch (err) {
+    console.error("getVideoById error:", err);
+    res.status(500).json({ message: "Server error fetching video" });
+  }
+};
+
+/**
+ * GET VIDEOS BY CATEGORY (FILTER)
+ */
+export const getVideosByCategory = async (req, res) => {
+  try {
+    const category = req.params.category;
+
+    const videos = await VideoModel.find({ category });
+
+    return res.json(videos);
+  } catch (err) {
+    console.error("getVideosByCategory error:", err);
+    res.status(500).json({ message: "Server error filtering videos" });
+  }
+};

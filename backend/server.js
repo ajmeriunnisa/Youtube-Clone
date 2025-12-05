@@ -3,6 +3,7 @@ import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
 import channelRoutes from "./routes/channel.routes.js";
+import videoRoutes from "./routes/video.routes.js"
 
 dotenv.config();
 
@@ -25,7 +26,8 @@ app.get("/", (req, res) => {
 
 // User Routes
 app.use("/api/user", userRoutes);
-app.use("/api/channels",channelRoutes)
+app.use("/api/channels",channelRoutes);
+app.use("/api/videos",videoRoutes)
 
 // -----------------------
 //  SERVER START
