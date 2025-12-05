@@ -71,3 +71,58 @@ export const getChannel = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+/**
+ * UPDATE CHANNEL
+ */
+export const updateChannel = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
+
+    if (!channel) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+
+    if (channel.owner.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    const updated = await ChannelModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    return res.json({
+      message: "Channel updated successfully",
+      channel: updated
+    });
+  } catch (error) {
+    console.error("updateChannel error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+/**
+ * DELETE CHANNEL
+ */
+export const deleteChannel = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id);
+
+    if (!channel) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+
+    if (channel.owner.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await channel.deleteOne();
+
+    return res.json({ message: "Channel deleted successfully" });
+  } catch (error) {
+    console.error("deleteChannel error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

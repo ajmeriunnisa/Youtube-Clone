@@ -3,7 +3,7 @@
 // ---------------------------------------------
 
 import express from "express";
-import { createChannel, getAllChannels, getChannel } from "../controllers/channel.controller";
+import { createChannel, deleteChannel, getAllChannels, getChannel, updateChannel } from "../controllers/channel.controller";
 import authMiddleware from "../middleware/auth.middleware";
 
 const router = express.Router();
@@ -23,5 +23,14 @@ router.get("/", getAllChannels);
  */
 router.get("/:id", getChannel);
 
+/**
+ * UPDATE CHANNEL (Protected)
+ */
+router.put("/:id", authMiddleware, updateChannel);
+
+/**
+ * DELETE CHANNEL (Protected)
+ */
+router.delete("/:id", authMiddleware, deleteChannel);
 
 export default router;
