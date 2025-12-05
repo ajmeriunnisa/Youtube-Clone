@@ -30,7 +30,7 @@ export const createChannel = async (req, res) => {
     const user = await UserModel.findById(req.user.id);
     user.channels.push(channel._id);
     await user.save();
-    
+
     return res.status(201).json({
       message: "Channel created successfully",
       channel
@@ -38,5 +38,36 @@ export const createChannel = async (req, res) => {
   } catch (error) {
     console.error("createChannel error:", error);
     return res.status(500).json({ message: "Server error while creating channel" });
+  }
+};
+
+/**
+ * GET ALL CHANNELS
+ */
+export const getAllChannels = async (req, res) => {
+  try {
+    const channels = await ChannelModel.find().populate("owner", "username email");
+    return res.json(channels);
+  } catch (error) {
+    console.error("getAllChannels error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+/**
+ * GET A SINGLE CHANNEL
+ */
+export const getChannel = async (req, res) => {
+  try {
+    const channel = await ChannelModel.findById(req.params.id).populate("owner", "username email");
+
+    if (!channel) {
+      return res.status(404).json({ message: "Channel not found" });
+    }
+
+    return res.json(channel);
+  } catch (error) {
+    console.error("getChannel error:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
