@@ -66,4 +66,49 @@ export const register = async (req, res) => {
   }
 };
 
+/**
+ * LOGIN
+ */
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body || {};
 
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required." });
+    }
+
+    const user = await UserModel.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    // Compare password
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ message: "Invalid credentials." });
+    }
+
+    // Create JWT payload
+    const payload = {
+      id: user._id.toString(),
+      email: user.email,
+      username: user.username,
+    };
+
+    // Sign token
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+    // Return token + user (without password)
+    const userSafe = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar,
+    };
+
+    return res.json({ message: "Login successful", token, user: userSafe });
+  } catch (err) {
+    console.error("auth.login error:", err);
+    return res.status(500).json({ message: "Server error while logging in" });
+  }
+};
