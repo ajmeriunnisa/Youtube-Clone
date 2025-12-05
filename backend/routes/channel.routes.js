@@ -3,8 +3,8 @@
 // ---------------------------------------------
 
 import express from "express";
-import { createChannel, deleteChannel, getAllChannels, getChannel, updateChannel } from "../controllers/channel.controller";
-import authMiddleware from "../middleware/auth.middleware";
+import { createChannel, deleteChannel, getAllChannels, getChannel, updateChannel } from "../controllers/channel.controller.js";
+import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 

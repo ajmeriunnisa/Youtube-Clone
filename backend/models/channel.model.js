@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const channelSchema = new mongoose.Schema(
   {
     // Link to the User creating this channel
-    user: {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

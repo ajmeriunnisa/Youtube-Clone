@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
 });
 
 // User Routes
-app.use("/api", userRoutes);
-app.use("/api",channelRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/channels",channelRoutes)
 
 // -----------------------
 //  SERVER START
