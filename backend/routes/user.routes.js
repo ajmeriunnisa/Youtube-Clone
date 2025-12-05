@@ -8,13 +8,13 @@ import {registerUser,loginUser} from "../controllers/user.controller.js";
 const router = express.Router();
 
 // ---------------------------------------------
-//  @route   POST /api/users/register
+//  @route   POST /api/register
 //  @desc    Register a new user
 // ---------------------------------------------
 router.post("/register", registerUser);
 
 // ---------------------------------------------
-//  @route   POST /api/users/login
+//  @route   POST /api/login
 //  @desc    Login user and return token
 // ---------------------------------------------
 router.post("/login", loginUser);
