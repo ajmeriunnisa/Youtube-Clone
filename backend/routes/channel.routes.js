@@ -4,13 +4,14 @@
 
 import express from "express";
 import { createChannel } from "../controllers/channel.controller";
+import authMiddleware from "../middleware/auth.middleware";
 
 const router = express.Router();
 
 /**
- * CREATE CHANNEL
+ * CREATE CHANNEL (Protected)
  */
-router.post("/", createChannel);
+router.post("/", authMiddleware, createChannel);
 
 
 export default router;
