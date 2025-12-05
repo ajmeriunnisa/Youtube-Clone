@@ -1,5 +1,8 @@
 import express from "express";
 import connectDB from "./config/db.js";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const app=new express();
 
@@ -21,7 +24,7 @@ app.get("/", (req, res) => {
 // -----------------------
 //  SERVER START
 // -----------------------
-const PORT=5000;
+const PORT=process.env.PORT || 5000;
 
 app.listen(PORT,()=>{
     console.log(`SERVER IS LISTENING ON PORT ${PORT}`);  
