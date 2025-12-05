@@ -239,3 +239,41 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ message: "Server error deleting comment" });
   }
 };
+
+/**
+ * LIKE VIDEO
+ */
+export const likeVideo = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+
+    video.likes += 1;
+
+    await video.save();
+
+    res.json({ message: "Video liked", likes: video.likes });
+  } catch (err) {
+    console.error("likeVideo error:", err);
+    res.status(500).json({ message: "Server error liking video" });
+  }
+};
+
+/**
+ * DISLIKE VIDEO
+ */
+export const dislikeVideo = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+
+    video.dislikes += 1;
+
+    await video.save();
+
+    res.json({ message: "Video disliked", dislikes: video.dislikes });
+  } catch (err) {
+    console.error("dislikeVideo error:", err);
+    res.status(500).json({ message: "Server error disliking video" });
+  }
+};

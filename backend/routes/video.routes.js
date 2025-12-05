@@ -3,7 +3,7 @@
 // ---------------------------------------------
 
 import express from "express";
-import { addComment, createVideo, deleteComment, deleteVideo, getAllVideos, getVideoById, getVideosByCategory, updateComment, updateVideo } from "../controllers/video.controller.js";
+import { addComment, createVideo, deleteComment, deleteVideo, dislikeVideo, getAllVideos, getVideoById, getVideosByCategory, likeVideo, updateComment, updateVideo } from "../controllers/video.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -52,5 +52,15 @@ router.put("/:videoId/comments/:commentId",authMiddleware,updateComment);
  * DELETE COMMENT (Protected)
  */
 router.delete("/:videoId/comments/:commentId",authMiddleware,deleteComment);
+
+/**
+ * LIKE VIDEO (Protected)
+ */
+router.post("/:id/like", authMiddleware, likeVideo);
+
+/**
+ * DISLIKE VIDEO (Protected)
+ */
+router.post("/:id/dislike", authMiddleware, dislikeVideo);
 
 export default router;
