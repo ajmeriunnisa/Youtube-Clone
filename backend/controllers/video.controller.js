@@ -91,3 +91,56 @@ export const getVideosByCategory = async (req, res) => {
     res.status(500).json({ message: "Server error filtering videos" });
   }
 };
+
+/**
+ * UPDATE VIDEO
+ */
+export const updateVideo = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    // Only uploader can edit
+    if (video.uploader.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to edit this video" });
+    }
+
+    const updated = await VideoModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+
+    return res.json({ message: "Video updated", video: updated });
+  } catch (err) {
+    console.error("updateVideo error:", err);
+    res.status(500).json({ message: "Server error updating video" });
+  }
+};
+
+/**
+ * DELETE VIDEO
+ */
+export const deleteVideo = async (req, res) => {
+  try {
+    const video = await VideoModel.findById(req.params.id);
+
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    if (video.uploader.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to delete this video" });
+    }
+
+    await video.deleteOne();
+
+    return res.json({ message: "Video deleted successfully" });
+  } catch (err) {
+    console.error("deleteVideo error:", err);
+    res.status(500).json({ message: "Server error deleting video" });
+  }
+};
