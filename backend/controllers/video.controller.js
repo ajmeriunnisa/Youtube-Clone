@@ -144,3 +144,98 @@ export const deleteVideo = async (req, res) => {
     res.status(500).json({ message: "Server error deleting video" });
   }
 };
+
+/**
+ * ADD COMMENT
+ */
+export const addComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment cannot be empty" });
+    }
+
+    const video = await VideoModel.findById(req.params.id);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+
+    const newComment = {
+      commentId: "c" + Date.now(),
+      userId: req.user.id,
+      text,
+      timestamp: new Date(),
+    };
+
+    video.comments.push(newComment);
+    await video.save();
+
+    res.json({ message: "Comment added", comment: newComment });
+  } catch (err) {
+    console.error("addComment error:", err);
+    res.status(500).json({ message: "Server error adding comment" });
+  }
+};
+
+/**
+ * UPDATE COMMENT
+ */
+export const updateComment = async (req, res) => {
+  try {
+    const { videoId, commentId } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment cannot be empty" });
+    }
+
+    const video = await VideoModel.findById(videoId);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    const comment = video.comments.find((c) => c.commentId === commentId);
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Only comment owner can edit the comment
+    if (comment.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to edit this comment" });
+    }
+
+    comment.text = text;
+    comment.timestamp = new Date();
+
+    await video.save();
+
+    return res.json({
+      message: "Comment updated successfully",
+      comment,
+    });
+  } catch (err) {
+    console.error("updateComment error:", err);
+    res.status(500).json({ message: "Server error updating comment" });
+  }
+};
+
+/**
+ * DELETE COMMENT
+ */
+export const deleteComment = async (req, res) => {
+  try {
+    const { videoId, commentId } = req.params;
+
+    const video = await VideoModel.findById(videoId);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+
+    video.comments = video.comments.filter((c) => c.commentId !== commentId);
+
+    await video.save();
+
+    res.json({ message: "Comment deleted" });
+  } catch (err) {
+    console.error("deleteComment error:", err);
+    res.status(500).json({ message: "Server error deleting comment" });
+  }
+};

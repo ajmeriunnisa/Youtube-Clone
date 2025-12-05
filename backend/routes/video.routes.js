@@ -3,11 +3,10 @@
 // ---------------------------------------------
 
 import express from "express";
-import { createVideo, deleteVideo, getAllVideos, getVideoById, getVideosByCategory, updateVideo } from "../controllers/video.controller";
-import authMiddleware from "../middleware/auth.middleware";
+import { addComment, createVideo, deleteComment, deleteVideo, getAllVideos, getVideoById, getVideosByCategory, updateComment, updateVideo } from "../controllers/video.controller.js";
+import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
-
 
 /**
  * CREATE VIDEO (Protected)
@@ -38,5 +37,20 @@ router.put("/:id", authMiddleware, updateVideo);
  * DELETE VIDEO (Protected)
  */
 router.delete("/:id", authMiddleware, deleteVideo);
+
+/**
+ * ADD COMMENT (Protected)
+ */
+router.post("/:id/comments", authMiddleware, addComment);
+
+/**
+ * UPDATE COMMENT (Protected)
+ */
+router.put("/:videoId/comments/:commentId",authMiddleware,updateComment);
+
+/**
+ * DELETE COMMENT (Protected)
+ */
+router.delete("/:videoId/comments/:commentId",authMiddleware,deleteComment);
 
 export default router;
