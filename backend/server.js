@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 // User Routes
-app.use("/api/users", userRoutes);
+app.use("/api", userRoutes);
 
 // -----------------------
 //  SERVER START
