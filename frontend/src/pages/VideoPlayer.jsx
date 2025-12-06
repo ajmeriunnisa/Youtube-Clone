@@ -37,8 +37,6 @@ const VideoPlayer = () => {
     if (!commentText.trim()) return alert("Comment cannot be empty");
     try {
       const res = await axios.post(`/api/videos/${id}/comments`, { text: commentText });
-      // backend returns the added comment as "comment"
-      // but your video model stores comments inside video — we'll refetch
       const updatedVideo = await axios.get(`/api/videos/${id}`);
       setVideo(updatedVideo.data);
       setCommentText("");
@@ -155,10 +153,11 @@ const VideoPlayer = () => {
               // adapt comment object fields: commentId, userId, text, timestamp
               const commentObj = {
                 _id: c.commentId || c._id,
-                userEmail: c.userId || c.userEmail,
-                userName: c.userName || c.user || "User",
+                userId: c.userId,
+                userEmail: c.userEmail,
+                userName: c.userName || "User",
                 text: c.text,
-                date: c.timestamp ? new Date(c.timestamp).toLocaleDateString() : "",
+                createdAt: c.timestamp,
               };
 
               return (
@@ -167,7 +166,7 @@ const VideoPlayer = () => {
                   comment={commentObj}
                   currentUser={user}
                   onDelete={() => handleDeleteComment(commentObj._id)}
-                  onUpdate={(id, newText) => handleUpdateComment(commentObj._id, newText)}
+                  onUpdate={(newText) => handleUpdateComment(commentObj._id, newText)}
                 />
               );
             })}

@@ -17,7 +17,6 @@ const Login = () => {
       const token = res.data.token;
       let user = res.data.user || {};
 
-      // normalize user shape (some endpoints used `username`)
       if (!user.name && user.username) user.name = user.username;
 
       localStorage.setItem("token", token);

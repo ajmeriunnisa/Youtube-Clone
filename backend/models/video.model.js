@@ -67,10 +67,13 @@ const videoSchema = new mongoose.Schema(
       {
         commentId: String,
         userId: String,
+        userEmail: String,
+        userName: String,
         text: String,
         timestamp: Date,
       },
     ],
+
   },
   { timestamps: true }
 );

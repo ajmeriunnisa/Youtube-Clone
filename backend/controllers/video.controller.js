@@ -162,6 +162,8 @@ export const addComment = async (req, res) => {
     const newComment = {
       commentId: "c" + Date.now(),
       userId: req.user.id,
+      userEmail: req.user.email,
+      userName: req.user.name || req.user.username,
       text,
       timestamp: new Date(),
     };
@@ -229,8 +231,19 @@ export const deleteComment = async (req, res) => {
     const video = await VideoModel.findById(videoId);
     if (!video) return res.status(404).json({ message: "Video not found" });
 
-    video.comments = video.comments.filter((c) => c.commentId !== commentId);
+    const comment = video.comments.find((c) => c.commentId === commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
 
+    // Only comment owner can delete
+    if (comment.userId.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this comment" });
+    }
+
+    video.comments = video.comments.filter((c) => c.commentId !== commentId);
     await video.save();
 
     res.json({ message: "Comment deleted" });

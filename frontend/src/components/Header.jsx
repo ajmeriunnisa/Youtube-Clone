@@ -58,7 +58,18 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
 
   const handleLogout = () => {
     if (!window.confirm("Do you really want to logout?")) return;
-    localStorage.clear();
+
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+   
+  }
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("userHasChannel");
+
     setUser(null);
     setChannel(null);
     navigate("/");
@@ -101,16 +112,77 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
           {user ? (
             <div ref={dropdownRef} className="relative">
               <div onClick={() => setShowLogout(!showLogout)} className="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center cursor-pointer uppercase">
-                {(user.name || user.username || "U").charAt(0)}
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name || user.username || user.email}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  (user.name || user.username || "U").charAt(0)
+                )}
               </div>
 
               {showLogout && (
-                <div className="absolute right-0 mt-2 bg-white border rounded shadow text-sm w-40">
-                  <p className="px-3 py-2 font-semibold text-gray-700">{user.name || user.username}</p>
-                  {channel && <div onClick={() => navigate("/channel")} className="px-3 py-2 cursor-pointer hover:bg-gray-100">View Your Channel</div>}
-                  <div onClick={handleLogout} className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-red-600">Logout</div>
+                <div className="absolute right-0 mt-2 bg-white border rounded shadow text-sm w-56">
+                  {/* top user info */}
+                  <div className="px-3 py-2 border-b">
+                    <p className="font-semibold text-gray-800">
+                      {user.name || user.username}
+                    </p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
+
+                  {/* account / profile section */}
+                  <div className="py-1 border-b">
+                    {channel && (
+                      <div
+                        onClick={() => {
+                          navigate("/channel");
+                          setShowLogout(false); // close dropdown
+                        }}
+                        className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                      >
+                        View Your Channel
+                      </div>
+                    )}
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      YouTube Studio
+                    </div>
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Switch account
+                    </div>
+                  </div>
+
+                  {/* settings/help section */}
+                  <div className="py-1 border-b">
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Purchases and memberships
+                    </div>
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Your data in YouTube
+                    </div>
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Settings
+                    </div>
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Help
+                    </div>
+                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                      Send feedback
+                    </div>
+                  </div>
+
+                  {/* logout at bottom */}
+                  <div
+                    onClick={handleLogout}
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+                  >
+                    Logout
+                  </div>
                 </div>
               )}
+
             </div>
           ) : (
             <Link to="/login" className="flex items-center gap-2 bg-blue-600 text-white text-sm px-3 py-1.5 rounded-md hover:bg-blue-700 transition"><FiUser /> Sign in</Link>

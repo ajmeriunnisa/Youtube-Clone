@@ -5,7 +5,7 @@ import axios from "../api/axios";
 const SignIn = () => {
   const API = axios;
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", avatar: "",});
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -18,6 +18,7 @@ const SignIn = () => {
         username: form.name,
         email: form.email,
         password: form.password,
+        avatar: form.avatar,
       });
       alert("Registration successful — please login");
       navigate("/login");
@@ -64,6 +65,18 @@ const SignIn = () => {
               onChange={handleChange}
               type="password"
               placeholder="Enter password"
+              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold">Avatar URL (optional)</label>
+            <input
+              name="avatar"
+              value={form.avatar}
+              onChange={handleChange}
+              type="text"
+              placeholder="Paste image URL"
               className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
             />
           </div>

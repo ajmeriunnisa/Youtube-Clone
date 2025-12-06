@@ -4,13 +4,16 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(comment.text);
 
-  const isOwner = currentUser?.email === comment.userEmail;
+  const isOwner =
+  currentUser &&
+  (currentUser._id === comment.userId ||
+   currentUser.email === comment.userEmail);
 
   const handleSave = () => {
-    if (editedText.trim() === "") return;
-    onUpdate(comment._id, editedText);
-    setIsEditing(false);
-  };
+  if (editedText.trim() === "") return;
+  onUpdate(editedText);
+  setIsEditing(false);
+};
 
   return (
     <div className="p-3 bg-gray-100 rounded-lg mb-3 flex gap-3">
