@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
-import videos from "../utils/videos";
+import apiCalling from "../utils/apiCalling.js";
 
 const useVideos = () => {
-  const [videoData, setVideoData] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    setVideoData(videos);
+    async function loadVideos() {
+      const data = await apiCalling();
+      if (data) {
+        setVideos(data);
+      }
+    }
+    loadVideos();
   }, []);
 
-  return videoData;
+  return videos;
 };
 
 export default useVideos;
