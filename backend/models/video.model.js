@@ -63,6 +63,11 @@ const videoSchema = new mongoose.Schema(
       default: Date.now,
     },
 
+    duration: {
+      type:Number,
+      default:0,
+    },
+
     comments: [
       {
         commentId: String,

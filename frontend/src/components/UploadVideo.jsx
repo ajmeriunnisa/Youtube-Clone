@@ -14,6 +14,8 @@ const UploadVideo = () => {
     thumbnailUrl: "",
     videoUrl: "",
     category: "All",
+    duration: "",
+    views: "",
   });
 
   useEffect(() => {
@@ -49,6 +51,8 @@ const UploadVideo = () => {
     try {
       await axios.post("/api/videos", {
         ...videoData,
+        duration: Number(videoData.duration) || 0,
+        views: Number(videoData.views) || 0,
         channelId: channel._id,
         channelName: channel.name || channel.channelName,
       });
@@ -68,7 +72,37 @@ const UploadVideo = () => {
         <textarea name="description" placeholder="Description" value={videoData.description} onChange={handleChange} className="w-full px-3 py-2 border rounded-md h-24" />
         <input name="thumbnailUrl" placeholder="Thumbnail URL" value={videoData.thumbnailUrl} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
         <input name="videoUrl" placeholder="Video URL (YouTube or direct link)" value={videoData.videoUrl} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
-        <input name="category" placeholder="Category" value={videoData.category} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
+        <input
+          name="category"
+          placeholder="Category"
+          value={videoData.category}
+          onChange={handleChange}
+          required
+          className="w-full px-3 py-2 border rounded-md"
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            name="duration"
+            type="number"
+            min="0"
+            placeholder="Duration (seconds)"
+            value={videoData.duration}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+
+          <input
+            name="views"
+            type="number"
+            min="0"
+            placeholder="Views (optional)"
+            value={videoData.views}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+        </div>
+
         <button type="submit" className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Upload Video</button>
       </form>
     </div>

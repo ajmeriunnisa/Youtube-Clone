@@ -107,7 +107,7 @@ const VideoPlayer = () => {
           <div>
             <p className="font-bold text-gray-800 text-lg">{video.channelName}</p>
             <p className="text-sm text-gray-500">
-              {video.views} • {new Date(video.uploadDate || video.createdAt).toLocaleDateString()}
+              {video.views} views • {new Date(video.uploadDate || video.createdAt).toLocaleDateString()}
             </p>
           </div>
 

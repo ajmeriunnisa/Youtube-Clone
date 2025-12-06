@@ -13,6 +13,8 @@ export const createVideo = async (req, res) => {
       videoUrl,
       category,
       channelId,
+      duration,
+      views,
     } = req.body;
 
     if (!title || title.length < 3) {
@@ -33,6 +35,8 @@ export const createVideo = async (req, res) => {
       category,
       channelId,
       uploader: userId,
+      duration: Number(duration) || 0,
+      views: Number(views) || 0,
     });
 
     return res.status(201).json({
