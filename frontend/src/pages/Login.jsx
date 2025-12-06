@@ -1,69 +1,43 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../api/axios";
 
 const Login = () => {
-  // State for input values
+  const API = axios;
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // State for validation errors
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-
-  // Handle Form Submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) return alert("Please enter email and password");
 
-    const newErrors = {};
+    try {
+      const res = await API.post("/api/user/login", { email, password });
+      const token = res.data.token;
+      let user = res.data.user || {};
 
-    // Email validation
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Invalid email format";
+      // normalize user shape (some endpoints used `username`)
+      if (!user.name && user.username) user.name = user.username;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("isLoggedIn", "true");
+
+      // notify header
+      window.dispatchEvent(new Event("login"));
+
+      navigate("/");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
     }
-
-    // Password validation
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    // If errors exist → stop submit
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    // If no errors
-    setErrors({});
-
-    // ---- MULTI-USER SUPPORT ----
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const matchedUser = users.find(u => u.email === email && u.password === password);
-
-    if (!matchedUser) {
-      alert("Invalid email or password");
-      return;
-    }
-
-    // Login success
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("user", JSON.stringify(matchedUser));
-    window.dispatchEvent(new Event("login"));
-    navigate("/");
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      {/* Card container */}
       <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
-
         <form onSubmit={handleSubmit} className="space-y-4">
-
-          {/* Email */}
           <div>
             <label className="block mb-1 font-semibold">Email</label>
             <input
@@ -73,12 +47,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
           </div>
-
-          {/* Password */}
           <div>
             <label className="block mb-1 font-semibold">Password</label>
             <input
@@ -88,12 +57,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-            )}
           </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold"

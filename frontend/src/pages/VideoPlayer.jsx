@@ -1,172 +1,173 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import videos from "../utils/videos";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "../api/axios";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import Comment from "../components/Comment";
-import { FaShare } from "react-icons/fa";
 import SuggestedList from "../components/SuggestedList";
 
 const VideoPlayer = () => {
   const { id } = useParams();
-  const video = videos.find((v) => v.id === id);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!video) return <div className="p-4">Video not found</div>;
-
-  const currentUser = JSON.parse(localStorage.getItem("user"));
-
-  // USER COMMENTS (localStorage)
-  const [comments, setComments] = useState(() => {
-    const saved = localStorage.getItem(`comments_${id}`);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [video, setVideo] = useState(null);
+  const [allVideos, setAllVideos] = useState([]);
+  const [commentText, setCommentText] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem(`comments_${id}`, JSON.stringify(comments));
-  }, [comments, id]);
+    const load = async () => {
+      try {
+        const res = await axios.get(`/api/videos/${id}`);
+        setVideo(res.data);
 
-  const [commentText, setCommentText] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  // ADD USER COMMENT
-  const handleAddComment = () => {
-    if (commentText.trim() === "") {
-      setErrorMsg("Comment cannot be empty!");
-      return;
-    }
-
-    const newComment = {
-      id: Date.now(),
-      userName: currentUser.name,
-      userEmail: currentUser.email,
-      text: commentText,
-      date: new Date().toISOString().slice(0, 10),
+        const all = await axios.get("/api/videos");
+        setAllVideos(all.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
+    load();
+  }, [id]);
 
-    setComments([newComment, ...comments]);
-    setCommentText("");
-    setErrorMsg("");
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return alert("Comment cannot be empty");
+    try {
+      const res = await axios.post(`/api/videos/${id}/comments`, { text: commentText });
+      // backend returns the added comment as "comment"
+      // but your video model stores comments inside video — we'll refetch
+      const updatedVideo = await axios.get(`/api/videos/${id}`);
+      setVideo(updatedVideo.data);
+      setCommentText("");
+    } catch (err) {
+      alert(err.response?.data?.message || "Error adding comment");
+    }
   };
 
-  // DELETE USER COMMENT
-  const handleDeleteComment = (id) => {
-    setComments(comments.filter((c) => c.id !== id));
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`/api/videos/${id}/comments/${commentId}`);
+      const updatedVideo = await axios.get(`/api/videos/${id}`);
+      setVideo(updatedVideo.data);
+    } catch (err) {
+      alert("Error deleting comment");
+    }
   };
 
-  // UPDATE USER COMMENT
-  const handleUpdateComment = (id, newText) => {
-    setComments(
-      comments.map((c) => (c.id === id ? { ...c, text: newText } : c))
-    );
+  const handleUpdateComment = async (commentId, text) => {
+    try {
+      await axios.put(`/api/videos/${id}/comments/${commentId}`, { text });
+      const updatedVideo = await axios.get(`/api/videos/${id}`);
+      setVideo(updatedVideo.data);
+    } catch (err) {
+      alert("Error updating comment");
+    }
   };
 
-  // MERGE COMMENTS (sample comments + user comments)
-  const allComments = [
-    ...comments.map((c) => ({
-      ...c,
-      type: "user",
-    })),
-    ...video.comments.map((c) => ({
-      ...c,
-      type: "sample",
-    })),
-    
-  ];
+  const handleLike = async () => {
+    try {
+      const res = await axios.post(`/api/videos/${id}/like`);
+      setVideo({ ...video, likes: res.data.likes });
+    } catch (err) {
+      alert("Error liking video");
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const res = await axios.post(`/api/videos/${id}/dislike`);
+      setVideo({ ...video, dislikes: res.data.dislikes });
+    } catch (err) {
+      alert("Error disliking video");
+    }
+  };
+
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!video) return <div className="p-6">Video not found</div>;
 
   return (
     <div className="w-full flex flex-col lg:flex-row gap-6 p-4">
-      {/* LEFT SECTION */}
       <div className="flex-1 min-w-0">
-        <video controls src={video.videoUrl} className="w-full rounded-lg" />
+        {/* Use video tag when videoUrl is a direct URL, else iframe */}
+        {video.videoUrl && (video.videoUrl.includes("youtube") || video.videoUrl.includes("embed")) ? (
+          <iframe
+            title={video.title}
+            src={video.videoUrl}
+            className="w-full rounded-lg h-96 md:h-[600px]"
+            allowFullScreen
+          />
+        ) : (
+          <video controls src={video.videoUrl} className="w-full rounded-lg" />
+        )}
 
         <h1 className="text-xl font-semibold mt-3">{video.title}</h1>
 
-        {/* CHANNEL + LIKE/DISLIKE */}
         <div className="flex justify-between items-center mt-6">
           <div>
             <p className="font-bold text-gray-800 text-lg">{video.channelName}</p>
             <p className="text-sm text-gray-500">
-              {video.views} • {video.uploadDate}
+              {video.views} • {new Date(video.uploadDate || video.createdAt).toLocaleDateString()}
             </p>
           </div>
 
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <button onClick={handleLike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
               <AiOutlineLike />
               <span>{video.likes}</span>
             </button>
 
-            <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <button onClick={handleDislike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
               <AiOutlineDislike />
               <span>{video.dislikes}</span>
-            </button>
-
-            <button className="flex items-center gap-2 bg-gray-200 px-4 py-2 rounded-full">
-              <FaShare />
-              Share
             </button>
           </div>
         </div>
 
-        {/* DESCRIPTION */}
         <div className="mt-4 p-3 bg-gray-100 rounded-lg">
           <p className="text-gray-700 text-sm">{video.description}</p>
         </div>
 
-        {/* COMMENTS SECTION */}
+        {/* Comments */}
         <div className="mt-6">
           <h2 className="text-lg font-bold mb-3">Comments</h2>
+          {user ? (
+            <div className="flex gap-3 mb-4">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Add a public comment..."
+                className="flex-1 border p-2 rounded-md"
+              />
+              <button onClick={handleAddComment} className="bg-blue-600 text-white px-4 py-2 rounded-md">
+                Post
+              </button>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">Please log in to comment.</p>
+          )}
 
-          {/* Add Comment Input */}
-          <div className="flex gap-3 mb-4">
-            <input
-              type="text"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Add a public comment..."
-              className="flex-1 border p-2 rounded-md"
-            />
-            <button
-              onClick={handleAddComment}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md"
-            >
-              Post
-            </button>
-          </div>
-
-          {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
-
-          {/* Render ALL Comments */}
           <div className="space-y-4">
-            {allComments.map((comment) => {
+            {(video.comments || []).map((c) => {
+              // adapt comment object fields: commentId, userId, text, timestamp
+              const commentObj = {
+                _id: c.commentId || c._id,
+                userEmail: c.userId || c.userEmail,
+                userName: c.userName || c.user || "User",
+                text: c.text,
+                date: c.timestamp ? new Date(c.timestamp).toLocaleDateString() : "",
+              };
 
-              // sample comments = NON editable
-              if (comment.type === "sample") {
-                return (
-                  <div
-                    key={comment.id}
-                    className="flex gap-3 p-3 bg-gray-100 rounded-lg"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
-                      {comment.user.charAt(0)}
-                    </div>
-
-                    <div>
-                        <p className="font-semibold text-sm">{comment.user}</p>
-                      <p className="text-gray-700">{comment.text}</p>
-                      <p className="text-gray-500 text-xs">{comment.date}</p>
-                    </div>
-                  </div>
-                );
-              }
-
-              // user comments (editable)
               return (
                 <Comment
-                  key={comment.id}
-                  comment={comment}
-                  currentUser={currentUser}
-                  onDelete={handleDeleteComment}
-                  onUpdate={handleUpdateComment}
+                  key={commentObj._id}
+                  comment={commentObj}
+                  currentUser={user}
+                  onDelete={() => handleDeleteComment(commentObj._id)}
+                  onUpdate={(id, newText) => handleUpdateComment(commentObj._id, newText)}
                 />
               );
             })}
@@ -174,10 +175,9 @@ const VideoPlayer = () => {
         </div>
       </div>
 
-      {/* SUGGESTED VIDEOS */}
       <div className="w-full lg:w-1/3">
         <h2 className="text-lg font-bold mb-3">Suggested Videos</h2>
-        <SuggestedList videos={videos} currentId={id} limit={6} />
+        <SuggestedList videos={allVideos} currentId={video._id || video._id} limit={6} onCardClick={(vidId) => navigate(`/video/${vidId}`)} />
       </div>
     </div>
   );

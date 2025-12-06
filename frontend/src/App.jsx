@@ -15,7 +15,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <Header
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         onSearch={setSearchQuery}
@@ -24,19 +23,10 @@ function App() {
       />
 
       <div className="flex">
-        {/* Sidebar */}
         <Sidebar isOpen={isSidebarOpen} />
 
-        {/* Main Content */}
-        <main
-          className={`flex-1 p-4 transition-all duration-300 ml-0 ${
-            isSidebarOpen ? "lg:ml-56" : "lg:ml-20"
-          }`}
-        >
-          <Outlet context={{ 
-            searchQuery: searchQuery, 
-            selectedCategory :selectedCategory
-            }} />
+        <main className={`flex-1 p-4 transition-all duration-300 ml-0 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}>
+          <Outlet context={{ searchQuery: searchQuery, selectedCategory: selectedCategory }} />
         </main>
       </div>
     </div>

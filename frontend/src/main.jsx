@@ -1,55 +1,29 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import App from './App.jsx'
-import Home from './pages/Home.jsx'
-import Login from './pages/Login.jsx'
-import SignIn from './pages/SignIn.jsx'
-import VideoPlayer from './pages/VideoPlayer.jsx'
-import CreateChannel from './components/CreateChannel.jsx'
-import Channel from './pages/Channel.jsx'
-import UploadVideo from './components/UploadVideo.jsx'
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignIn from "./pages/SignIn";
+import VideoPlayer from "./pages/VideoPlayer";
+import CreateChannel from "./pages/CreateChannel";
+import Channel from "./pages/Channel";
+import UploadVideo from "./components/UploadVideo";
 
-const appRouter = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
-    element:<App/>,
+    element: <App />,
     children: [
-      {
-        path: "/",
-        element: <Home />
-      },
-      {
-      path:"/login",
-      element:<Login />
-      },
-      {
-        path:"/signup",
-        element:<SignIn/>
-      },
-      {
-        path:"/video/:id",
-        element:<VideoPlayer/>
-      },
-      {
-        path:"/create-channel",
-        element:<CreateChannel/>
-      },
-      {
-        path:"/channel",
-        element:<Channel/>
-      },
-      {
-        path:"/upload-video",
-        element:<UploadVideo/>
-      }
-    ]
+      { path: "/", element: <Home /> },
+      { path: "/login", element: <Login /> },
+      { path: "/signup", element: <SignIn /> },
+      { path: "/video/:id", element: <VideoPlayer /> },
+      { path: "/create-channel", element: <CreateChannel /> },
+      { path: "/channel", element: <Channel /> },
+      { path: "/upload-video", element: <UploadVideo /> },
+    ],
   },
-  
-])
+]);
 
-// ===== Rendering the App to the DOM =====
-createRoot(document.getElementById('root')).render(
-  <RouterProvider router={appRouter} />
-)
+createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);

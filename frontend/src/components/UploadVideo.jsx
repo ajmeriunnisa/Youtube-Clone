@@ -1,108 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const UploadVideo = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const key = `channel_${user.email}`;
- const channel = user
-    ? JSON.parse(localStorage.getItem(`channel_${user.email}`))
-    : null;
-  
+  const token = localStorage.getItem("token");
+  const [user, setUser] = useState(null);
+  const [channel, setChannel] = useState(null);
+
   const [videoData, setVideoData] = useState({
     title: "",
     description: "",
-    thumbnail: "",
+    thumbnailUrl: "",
     videoUrl: "",
-    duration: "",
+    category: "All",
   });
 
-  if (!user || !channel) {
-    return (
-      <div className="p-6 text-center">
-        <h2 className="text-xl font-semibold">No Channel Found</h2>
-        <p className="text-gray-600 mt-2">Create your channel first.</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) return navigate("/login");
+    setUser(storedUser);
 
-  const handleChange = (e) => {
-    setVideoData({ ...videoData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const storedVideos = JSON.parse(localStorage.getItem("videos")) || [];
-
-    const newVideo = {
-      id: "video-" + Date.now(),
-      ...videoData,
-      channelId: channel.channelId,
-      userEmail: user.email,
-      userName: user.name,
-      views: 0,
-      likes: 0,
-      comments: [],
+    const fetchChannel = async () => {
+      try {
+        const res = await axios.get("/api/channels");
+        const my = res.data.find((c) => c.owner && c.owner.email === storedUser.email);
+        if (!my) {
+          alert("Please create a channel first.");
+          navigate("/create-channel");
+          return;
+        }
+        setChannel(my);
+      } catch (err) {
+        console.error(err);
+        alert("Error fetching channel");
+      }
     };
 
-    storedVideos.push(newVideo);
+    fetchChannel();
+  }, [navigate]);
 
-    localStorage.setItem("videos", JSON.stringify(storedVideos));
+  const handleChange = (e) => setVideoData({ ...videoData, [e.target.name]: e.target.value });
 
-    alert("Video uploaded successfully!");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!channel) return alert("No channel found");
 
-    navigate("/channel");
+    try {
+      await axios.post("/api/videos", {
+        ...videoData,
+        channelId: channel._id,
+        channelName: channel.name || channel.channelName,
+      });
+      alert("Video uploaded successfully!");
+      navigate("/channel");
+    } catch (err) {
+      console.error(err);
+      alert("Error uploading video");
+    }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
-      <h2 className="text-2xl font-semibold mb-4">Upload Video</h2>
-
+    <div className="max-w-xl mx-auto p-6">
+      <h2 className="text-3xl font-bold mb-6 text-center">Upload Video</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        
-        <input
-          name="title"
-          placeholder="Video Title"
-          required
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-
-        <textarea
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-
-        <input
-          name="thumbnail"
-          placeholder="Thumbnail URL"
-          required
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-
-        <input
-          name="videoUrl"
-          placeholder="Video URL"
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-
-        <input
-          name="duration"
-          placeholder="Duration (e.g., 12:30)"
-          required
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-
-        <button className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-          Upload Video
-        </button>
-
+        <input name="title" placeholder="Title" value={videoData.title} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
+        <textarea name="description" placeholder="Description" value={videoData.description} onChange={handleChange} className="w-full px-3 py-2 border rounded-md h-24" />
+        <input name="thumbnailUrl" placeholder="Thumbnail URL" value={videoData.thumbnailUrl} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
+        <input name="videoUrl" placeholder="Video URL (YouTube or direct link)" value={videoData.videoUrl} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
+        <input name="category" placeholder="Category" value={videoData.category} onChange={handleChange} required className="w-full px-3 py-2 border rounded-md" />
+        <button type="submit" className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">Upload Video</button>
       </form>
     </div>
   );

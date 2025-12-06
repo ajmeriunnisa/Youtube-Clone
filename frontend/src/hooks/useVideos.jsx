@@ -1,24 +1,28 @@
 import { useState, useEffect } from "react";
-import apiCalling from "../utils/apiCalling.js";
+import axios from "../api/axios";
 
-const useVideos = () => {
+const useVideos = (category = "All") => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function loadVideos() {
+    async function fetchVideos() {
+      setLoading(true);
       try {
-        const data = await apiCalling();
-        setVideos(data || []);
+        let url = "/api/videos";
+        if (category && category !== "All") url = `/api/videos/category/${encodeURIComponent(category)}`;
+        const res = await axios.get(url);
+        setVideos(res.data);
       } catch (err) {
-        setError("Failed to fetch videos.");
+        console.error(err);
+        setError("Failed to fetch videos from server");
       } finally {
         setLoading(false);
       }
     }
-    loadVideos();
-  }, []);
+    fetchVideos();
+  }, [category]);
 
   return { videos, loading, error };
 };
