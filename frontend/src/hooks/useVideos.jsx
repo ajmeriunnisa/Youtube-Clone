@@ -3,18 +3,24 @@ import apiCalling from "../utils/apiCalling.js";
 
 const useVideos = () => {
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadVideos() {
-      const data = await apiCalling();
-      if (data) {
-        setVideos(data);
+      try {
+        const data = await apiCalling();
+        setVideos(data || []);
+      } catch (err) {
+        setError("Failed to fetch videos.");
+      } finally {
+        setLoading(false);
       }
     }
     loadVideos();
   }, []);
 
-  return videos;
+  return { videos, loading, error };
 };
 
 export default useVideos;
