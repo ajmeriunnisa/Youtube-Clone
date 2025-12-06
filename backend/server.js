@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
+import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
 import channelRoutes from "./routes/channel.routes.js";
 import videoRoutes from "./routes/video.routes.js"
@@ -13,6 +14,14 @@ const app=new express();
 //  CONNECT DATABASE
 // -----------------------
 connectDB();
+
+// -----------------------
+//  CORS MIDDLEWARE
+// -----------------------
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 
 // -----------------------
 //  MIDDLEWARE
