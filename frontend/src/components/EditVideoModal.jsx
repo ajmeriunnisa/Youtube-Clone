@@ -41,8 +41,8 @@ const EditVideoModal = ({
 
         {/* Action buttons */}
         <div className="flex justify-end gap-3">
-          <button onClick={onCancel} className="bg-gray-300 px-4 py-1 rounded">Cancel</button>
-          <button onClick={onSave} className="bg-blue-600 text-white px-4 py-1 rounded">Save</button>
+          <button onClick={onCancel} className="bg-gray-300 px-4 py-1 rounded cursor-pointer">Cancel</button>
+          <button onClick={onSave} className="bg-blue-600 text-white px-4 py-1 rounded cursor-pointer">Save</button>
         </div>
       </div>
     </div>

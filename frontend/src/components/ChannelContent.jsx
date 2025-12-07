@@ -38,7 +38,7 @@ const ChannelContent = ({
           <div className="flex items-center gap-2 mt-2">
             <button className="bg-red-600 text-white px-5 py-1.5 rounded-full text-sm">Subscribe</button>
 
-            <button onClick={() => navigate("/upload-video")} className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm">
+            <button onClick={() => navigate("/upload-video")} className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm cursor-pointer">
               Upload Video
             </button>
           </div>
@@ -62,16 +62,14 @@ const ChannelContent = ({
               <p className="text-gray-600">No videos uploaded yet.</p>
             ) : (
               channelVideos.map((video) => (
-                <div key={video._id}
-                  className="cursor-pointer"
-                  onClick={() => navigate(`/video/${video._id}`)}>
-                  <img src={video.thumbnailUrl || video.thumbnail} alt={video.title} className="rounded-lg w-full h-32 sm:h-40 object-cover" />
+                <div key={video._id}>
+                  <img src={video.thumbnailUrl || video.thumbnail} alt={video.title} className="rounded-lg w-full h-32 sm:h-40 object-cover cursor-pointer" onClick={() => navigate(`/video/${video._id}`)}/>
                   <h3 className="mt-2 text-sm font-semibold">{video.title}</h3>
 
                   {video.uploader === user?._id || video.userEmail === user?.email ? (
                     <div className="flex gap-3 text-xs mt-1">
-                      <button className="text-blue-600" onClick={() => onEdit(video)}>Edit</button>
-                      <button className="text-red-600" onClick={() => onDelete(video._id)}>Delete</button>
+                      <button className="text-blue-600 cursor-pointer" onClick={() => onEdit(video)}>Edit</button>
+                      <button className="text-red-600 cursor-pointer" onClick={() => onDelete(video._id)}>Delete</button>
                     </div>
                   ) : null}
                 </div>

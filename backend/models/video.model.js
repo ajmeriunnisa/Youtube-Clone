@@ -32,6 +32,17 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
 
+    channelName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    channelProfileImage: {
+      type: String,
+      default: "",
+    },
+
     uploader: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

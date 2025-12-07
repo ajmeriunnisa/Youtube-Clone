@@ -1,4 +1,5 @@
 // Video CRUD controller with comments and likes/dislikes
+import ChannelModel from "../models/channel.model.js";
 import VideoModel from "../models/video.model.js";
 
 /**
@@ -15,6 +16,7 @@ export const createVideo = async (req, res) => {
       videoUrl,
       category,
       channelId,
+      channelName,
       duration,
       views,
     } = req.body;
@@ -29,6 +31,8 @@ export const createVideo = async (req, res) => {
       return res.status(400).json({ message: "Category is required" });
     }
 
+    const channel = await ChannelModel.findById(channelId);
+
     const newVideo = await VideoModel.create({
       title,
       description,
@@ -36,6 +40,8 @@ export const createVideo = async (req, res) => {
       videoUrl,
       category,
       channelId,
+      channelName: channel.name,
+      channelProfileImage: channel.profileImage,
       uploader: userId,
       duration: Number(duration) || 0,
       views: Number(views) || 0,

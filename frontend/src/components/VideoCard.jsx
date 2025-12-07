@@ -38,16 +38,16 @@ const VideoCard = ({ video }) => {
   };
 
   return (
-    <div 
-      onClick={handleClick} 
+    <div
+      onClick={handleClick}
       className="cursor-pointer w-full p-2 rounded-xl transition-all duration-200 hover:bg-gray-100"
     >
       {/* Thumbnail with duration badge */}
       <div className="relative">
-        <img 
-          src={video.thumbnailUrl || video.thumbnail} 
-          alt={video.title} 
-          className="w-full h-48 md:h-52 object-cover rounded-xl transition-all duration-200 hover:rounded-none" 
+        <img
+          src={video.thumbnailUrl || video.thumbnail}
+          alt={video.title}
+          className="w-full h-48 md:h-52 object-cover rounded-xl transition-all duration-200 hover:rounded-none"
         />
         {typeof video.duration === "number" && video.duration > 0 && (
           <span className="absolute bottom-1 right-1 bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded-sm">
@@ -55,15 +55,27 @@ const VideoCard = ({ video }) => {
           </span>
         )}
       </div>
-      
+
       {/* Video details */}
-      <div className="mt-3">
-        <h3 className="text-sm font-semibold line-clamp-2 leading-tight">{video.title}</h3>
-        <p className="text-xs text-gray-500 mt-1">{video.channelName}</p>
-        <div className="flex items-center text-xs text-gray-500">
-          <span>{formatViews(video.views)}</span>
-          <RxDotFilled className="text-gray-400 text-lg mx-0.5" />
-          <span>{new Date(video.uploadDate).toLocaleDateString()}</span>
+      <div className="mt-3 flex gap-2">
+        {video.channelProfileImage && (
+          <img
+            src={video.channelProfileImage}
+            alt={video.channelName}
+            className="w-8 h-8 rounded-full object-cover shrink-0"
+          />
+        )}
+
+        <div>
+          <h3 className="text-sm font-semibold line-clamp-2 leading-tight">
+            {video.title}
+          </h3>
+          <p className="text-xs text-gray-500 mt-1">{video.channelName}</p>
+          <div className="flex items-center text-xs text-gray-500">
+            <span>{formatViews(video.views)}</span>
+            <RxDotFilled className="text-gray-400 text-lg mx-0.5" />
+            <span>{new Date(video.uploadDate).toLocaleDateString()}</span>
+          </div>
         </div>
       </div>
     </div>
