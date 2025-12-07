@@ -1,3 +1,4 @@
+// React Router configuration and app entry point
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -10,6 +11,7 @@ import CreateChannel from "./pages/CreateChannel";
 import Channel from "./pages/Channel";
 import UploadVideo from "./components/UploadVideo";
 
+// Router configuration with nested routes
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,4 +28,5 @@ const router = createBrowserRouter([
   },
 ]);
 
+// Render app with router
 createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);

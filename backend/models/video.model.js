@@ -1,3 +1,4 @@
+// Video schema with comments, likes, and metadata
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema(
@@ -64,10 +65,11 @@ const videoSchema = new mongoose.Schema(
     },
 
     duration: {
-      type:Number,
-      default:0,
+      type: Number,
+      default: 0,
     },
 
+    // Embedded comments array
     comments: [
       {
         commentId: String,
@@ -78,7 +80,6 @@ const videoSchema = new mongoose.Schema(
         timestamp: Date,
       },
     ],
-
   },
   { timestamps: true }
 );

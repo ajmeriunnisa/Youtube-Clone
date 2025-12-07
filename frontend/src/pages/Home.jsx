@@ -1,3 +1,4 @@
+// Home page with video grid and category filtering
 import React from "react";
 import useVideos from "../hooks/useVideos";
 import VideoCard from "../components/VideoCard";
@@ -5,9 +6,10 @@ import { useOutletContext } from "react-router-dom";
 import FilterBar from "../components/FilterBar";
 
 const Home = () => {
-  const { searchQuery, selectedCategory, setSelectedCategory} = useOutletContext();
+  const { searchQuery, selectedCategory, setSelectedCategory } = useOutletContext();
   const { videos, loading, error } = useVideos(selectedCategory);
 
+  // Filter videos by search query
   const filteredVideos =
     !searchQuery || searchQuery.trim() === ""
       ? videos
@@ -17,7 +19,7 @@ const Home = () => {
 
   return (
     <div className="px-0 mt-15">
-      {/* filter bar just below header */}
+      {/* Fixed filter bar below header */}
       <div className="fixed top-16 z-40 w-full bg-white border-b">
         <FilterBar
           selectedCategory={selectedCategory}
@@ -25,6 +27,7 @@ const Home = () => {
         />
       </div>
 
+      {/* Video grid content */}
       <div className="px-2 sm:px-6 mt-4">
         {loading && (
           <p className="text-center text-gray-500">Loading videos...</p>
@@ -38,7 +41,8 @@ const Home = () => {
           </p>
         )}
 
-        <div className="grid gap-4 mt-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 ">
+        {/* Responsive video grid */}
+        <div className="grid gap-4 mt-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
           {!loading &&
             !error &&
             filteredVideos.map((video) => (

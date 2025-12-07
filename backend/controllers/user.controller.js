@@ -1,3 +1,4 @@
+// User authentication controller (register/login)
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model.js";
@@ -7,6 +8,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"; // token expiry
 
 /**
  * REGISTER USER
+ * Creates new user with password validation and hashing
  */
 export const registerUser = async (req, res) => {
   try {
@@ -74,7 +76,7 @@ export const registerUser = async (req, res) => {
       channels: [],
     });
 
-    // Return safe user data
+    // Return safe user data (no password)
     const userSafe = {
       _id: user._id,
       username: user.username,
@@ -96,6 +98,7 @@ export const registerUser = async (req, res) => {
 
 /**
  * LOGIN USER
+ * Authenticates user and returns JWT token
  */
 export const loginUser = async (req, res) => {
   try {
@@ -128,7 +131,7 @@ export const loginUser = async (req, res) => {
     // Create token
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-    // Safe user details
+    // Safe user details (no password)
     const userSafe = {
       _id: user._id,
       username: user.username,

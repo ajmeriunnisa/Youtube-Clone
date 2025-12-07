@@ -1,3 +1,4 @@
+// Custom hook for fetching videos by category
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 
@@ -6,12 +7,15 @@ const useVideos = (category = "All") => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch videos when category changes
   useEffect(() => {
     async function fetchVideos() {
       setLoading(true);
       try {
         let url = "/api/videos";
-        if (category && category !== "All") url = `/api/videos/category/${encodeURIComponent(category)}`;
+        if (category && category !== "All") {
+          url = `/api/videos/category/${encodeURIComponent(category)}`;
+        }
         const res = await axios.get(url);
         setVideos(res.data);
       } catch (err) {

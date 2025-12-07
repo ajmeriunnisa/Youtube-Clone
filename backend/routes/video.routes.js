@@ -46,12 +46,12 @@ router.post("/:id/comments", authMiddleware, addComment);
 /**
  * UPDATE COMMENT (Protected)
  */
-router.put("/:videoId/comments/:commentId",authMiddleware,updateComment);
+router.put("/:videoId/comments/:commentId", authMiddleware, updateComment);
 
 /**
  * DELETE COMMENT (Protected)
  */
-router.delete("/:videoId/comments/:commentId",authMiddleware,deleteComment);
+router.delete("/:videoId/comments/:commentId", authMiddleware, deleteComment);
 
 /**
  * LIKE VIDEO (Protected)

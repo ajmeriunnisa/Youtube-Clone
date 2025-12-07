@@ -1,3 +1,4 @@
+// Channel dashboard with video management
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChannelContent from "../components/ChannelContent";
@@ -16,6 +17,7 @@ const Channel = () => {
   const [editThumbnail, setEditThumbnail] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Fetch channel and videos on mount
   useEffect(() => {
     const currentUser = JSON.parse(localStorage.getItem("user"));
     if (!currentUser) {
@@ -26,11 +28,8 @@ const Channel = () => {
     let mounted = true;
 
     const fetchChannelAndVideos = async () => {
-      // console.log("Fetching channel for", currentUser.email);
       try {
         const res = await axios.get("/api/channels");
-        // console.log("Channels loaded", res.data);
-
         const myChannel = res.data.find(
           (c) => c.owner?.email === currentUser.email
         );
@@ -48,8 +47,6 @@ const Channel = () => {
           );
 
           const videosRes = await axios.get("/api/videos");
-          // console.log("Videos loaded", videosRes.data);
-
           const myVideos = (videosRes.data || []).filter(
             (v) => String(v.channelId) === String(myChannel._id)
           );
@@ -67,12 +64,15 @@ const Channel = () => {
     return () => {
       mounted = false;
     };
-  }, [navigate]); 
+  }, [navigate]);
 
+  // Loading state
   if (loading) {
-  return <div className="p-6 text-center">Loading channel...</div>;
-}
-if (!channel) {
+    return <div className="p-6 text-center">Loading channel...</div>;
+  }
+
+  // No channel state
+  if (!channel) {
     return (
       <div className="p-6 text-center">
         <h2 className="text-xl font-semibold">No Channel Found</h2>
@@ -81,6 +81,7 @@ if (!channel) {
     );
   }
 
+  // Delete video handler
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this video?")) return;
     try {
@@ -91,6 +92,7 @@ if (!channel) {
     }
   };
 
+  // Edit video handler
   const handleEdit = (video) => {
     setEditingVideo(video);
     setEditTitle(video.title);
@@ -98,6 +100,7 @@ if (!channel) {
     setEditThumbnail(video.thumbnailUrl || video.thumbnail);
   };
 
+  // Save edited video
   const handleSaveEdit = async () => {
     if (!editingVideo) return;
     try {
@@ -115,17 +118,9 @@ if (!channel) {
     }
   };
 
-  if (!channel) {
-    return (
-      <div className="p-6 text-center">
-        <h2 className="text-xl font-semibold">No Channel Found</h2>
-        <p className="text-gray-600 mt-2">Create your channel first.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full pb-10">
+      {/* Channel content with tabs */}
       <ChannelContent
         channel={{
           channelName: channel.name || channel.channelName,
@@ -144,6 +139,7 @@ if (!channel) {
         channelHandle={`@${(channel.name || channel.channelName).replace(/\s+/g, "").toLowerCase()}`}
       />
 
+      {/* Edit video modal */}
       <EditVideoModal
         editingVideo={editingVideo}
         editTitle={editTitle}

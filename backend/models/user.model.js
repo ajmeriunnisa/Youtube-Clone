@@ -1,3 +1,4 @@
+// User schema with auth fields and channel references
 import mongoose from "mongoose";
 
 /**

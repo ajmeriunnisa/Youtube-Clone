@@ -1,8 +1,10 @@
+// Channel CRUD controller functions
 import ChannelModel from "../models/channel.model.js";
 import UserModel from "../models/user.model.js";
 
 /**
  * CREATE CHANNEL
+ * Creates new channel for authenticated user
  */
 export const createChannel = async (req, res) => {
   try {
@@ -26,7 +28,7 @@ export const createChannel = async (req, res) => {
       owner: req.user.id
     });
 
-    // Push channel ID into user document
+    // Link channel to user document
     const user = await UserModel.findById(req.user.id);
     user.channels.push(channel._id);
     await user.save();
@@ -43,6 +45,7 @@ export const createChannel = async (req, res) => {
 
 /**
  * GET ALL CHANNELS
+ * Returns all channels with owner info
  */
 export const getAllChannels = async (req, res) => {
   try {
@@ -55,7 +58,8 @@ export const getAllChannels = async (req, res) => {
 };
 
 /**
- * GET A SINGLE CHANNEL
+ * GET SINGLE CHANNEL
+ * Returns channel by ID with owner info
  */
 export const getChannel = async (req, res) => {
   try {
@@ -74,6 +78,7 @@ export const getChannel = async (req, res) => {
 
 /**
  * UPDATE CHANNEL
+ * Updates channel details (owner only)
  */
 export const updateChannel = async (req, res) => {
   try {
@@ -105,6 +110,7 @@ export const updateChannel = async (req, res) => {
 
 /**
  * DELETE CHANNEL
+ * Deletes channel (owner only)
  */
 export const deleteChannel = async (req, res) => {
   try {

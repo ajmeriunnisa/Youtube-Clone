@@ -1,7 +1,9 @@
+// Video CRUD controller with comments and likes/dislikes
 import VideoModel from "../models/video.model.js";
 
 /**
  * CREATE VIDEO
+ * Uploads new video with validation
  */
 export const createVideo = async (req, res) => {
   try {
@@ -51,6 +53,7 @@ export const createVideo = async (req, res) => {
 
 /**
  * GET ALL VIDEOS
+ * Returns all videos sorted by newest first
  */
 export const getAllVideos = async (req, res) => {
   try {
@@ -81,7 +84,8 @@ export const getVideoById = async (req, res) => {
 };
 
 /**
- * GET VIDEOS BY CATEGORY (FILTER)
+ * GET VIDEOS BY CATEGORY
+ * Filters videos by category name
  */
 export const getVideosByCategory = async (req, res) => {
   try {
@@ -98,6 +102,7 @@ export const getVideosByCategory = async (req, res) => {
 
 /**
  * UPDATE VIDEO
+ * Uploader-only video editing
  */
 export const updateVideo = async (req, res) => {
   try {
@@ -127,6 +132,7 @@ export const updateVideo = async (req, res) => {
 
 /**
  * DELETE VIDEO
+ * Uploader-only video deletion
  */
 export const deleteVideo = async (req, res) => {
   try {
@@ -151,6 +157,7 @@ export const deleteVideo = async (req, res) => {
 
 /**
  * ADD COMMENT
+ * Adds comment to video (requires auth)
  */
 export const addComment = async (req, res) => {
   try {
@@ -184,6 +191,7 @@ export const addComment = async (req, res) => {
 
 /**
  * UPDATE COMMENT
+ * Comment owner-only editing
  */
 export const updateComment = async (req, res) => {
   try {
@@ -205,7 +213,7 @@ export const updateComment = async (req, res) => {
       return res.status(404).json({ message: "Comment not found" });
     }
 
-    // Only comment owner can edit the comment
+    // Only comment owner can edit
     if (comment.userId.toString() !== req.user.id) {
       return res.status(403).json({ message: "Unauthorized to edit this comment" });
     }
@@ -227,6 +235,7 @@ export const updateComment = async (req, res) => {
 
 /**
  * DELETE COMMENT
+ * Comment owner-only deletion
  */
 export const deleteComment = async (req, res) => {
   try {
@@ -259,6 +268,7 @@ export const deleteComment = async (req, res) => {
 
 /**
  * LIKE VIDEO
+ * Increments video likes counter
  */
 export const likeVideo = async (req, res) => {
   try {
@@ -266,7 +276,6 @@ export const likeVideo = async (req, res) => {
     if (!video) return res.status(404).json({ message: "Video not found" });
 
     video.likes += 1;
-
     await video.save();
 
     res.json({ message: "Video liked", likes: video.likes });
@@ -278,6 +287,7 @@ export const likeVideo = async (req, res) => {
 
 /**
  * DISLIKE VIDEO
+ * Increments video dislikes counter
  */
 export const dislikeVideo = async (req, res) => {
   try {
@@ -285,7 +295,6 @@ export const dislikeVideo = async (req, res) => {
     if (!video) return res.status(404).json({ message: "Video not found" });
 
     video.dislikes += 1;
-
     await video.save();
 
     res.json({ message: "Video disliked", dislikes: video.dislikes });

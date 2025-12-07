@@ -1,3 +1,4 @@
+// User registration form (Sign Up)
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -5,10 +6,12 @@ import axios from "../api/axios";
 const SignIn = () => {
   const API = axios;
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "", avatar: "",});
+  const [form, setForm] = useState({ name: "", email: "", password: "", avatar: "" });
 
+  // Handle form input changes
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Handle registration form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.password) return alert("Fill all fields");
@@ -29,9 +32,10 @@ const SignIn = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
+      {/* Registration form container */}
       <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">Create Account</h2>
-
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 font-semibold">Full Name</label>
@@ -88,7 +92,8 @@ const SignIn = () => {
             Sign Up
           </button>
         </form>
-
+        
+        {/* Login link */}
         <p className="text-center text-sm mt-4">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600 hover:underline font-semibold">

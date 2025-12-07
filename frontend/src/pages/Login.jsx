@@ -1,3 +1,4 @@
+// User login form with localStorage persistence
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -8,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Handle login form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return alert("Please enter email and password");
@@ -17,13 +19,14 @@ const Login = () => {
       const token = res.data.token;
       let user = res.data.user || {};
 
+      // Use username as fallback for name
       if (!user.name && user.username) user.name = user.username;
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("isLoggedIn", "true");
 
-      // notify header
+      // Notify header component
       window.dispatchEvent(new Event("login"));
 
       navigate("/");
@@ -34,8 +37,10 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
+      {/* Login form container */}
       <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 font-semibold">Email</label>
@@ -47,6 +52,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+          
           <div>
             <label className="block mb-1 font-semibold">Password</label>
             <input
@@ -57,6 +63,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold"
@@ -64,8 +71,10 @@ const Login = () => {
             Login
           </button>
         </form>
+        
+        {/* Signup link */}
         <p className="text-center text-sm mt-4">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link to="/signup" className="text-blue-600 hover:underline font-semibold">
             Sign up
           </Link>

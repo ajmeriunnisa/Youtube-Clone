@@ -1,3 +1,4 @@
+// Channel schema with owner validation (1 user = 1 channel)
 import mongoose from "mongoose";
 
 const channelSchema = new mongoose.Schema(

@@ -1,3 +1,4 @@
+// Channel creation form with existing channel check
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -5,6 +6,7 @@ import axios from "../api/axios";
 const CreateChannel = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -12,13 +14,16 @@ const CreateChannel = () => {
     profileImage: "",
   });
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!user) navigate("/login");
   }, [user, navigate]);
 
+  // Handle form input changes
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Create channel or redirect if exists
   const handleCreate = async () => {
     if (!form.name.trim()) return alert("Channel name is required");
 
@@ -63,6 +68,7 @@ const CreateChannel = () => {
     <div className="max-w-xl mx-auto p-6">
       <h2 className="text-3xl font-bold mb-6 text-center">Create Your Channel</h2>
 
+      {/* Channel form */}
       <div className="space-y-4">
         <div>
           <label className="block font-medium mb-1">Channel Name</label>

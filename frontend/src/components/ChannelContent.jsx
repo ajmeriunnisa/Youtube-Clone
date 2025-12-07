@@ -1,3 +1,4 @@
+// Channel content component with tabs and video grid
 import React from "react";
 
 const tabs = ["Home", "Videos", "Shorts", "Live", "Playlists", "Community"];
@@ -15,10 +16,12 @@ const ChannelContent = ({
 }) => {
   return (
     <>
+      {/* Channel banner */}
       <div className="w-full h-48 md:h-60 bg-gray-200">
         {channel.banner && <img src={channel.banner} className="w-full h-full object-cover" alt="Channel Banner" />}
       </div>
 
+      {/* Channel info and buttons */}
       <div className="px-4 md:px-8 mt-4 flex gap-4">
         {channel.profileImage && (
           <img src={channel.profileImage} className="w-20 h-20 md:w-24 md:h-24 rounded-full border shadow-sm" alt="Profile" />
@@ -42,6 +45,7 @@ const ChannelContent = ({
         </div>
       </div>
 
+      {/* Tab navigation */}
       <div className="mt-6 border-b px-4 md:px-8 flex gap-6 overflow-x-auto text-sm">
         {tabs.map((tab) => (
           <button key={tab} onClick={() => setActiveTab(tab)} className={`pb-2 ${activeTab === tab ? "border-b-2 border-black font-semibold" : ""}`}>
@@ -50,6 +54,7 @@ const ChannelContent = ({
         ))}
       </div>
 
+      {/* Videos content */}
       <div className="px-4 md:px-8 mt-6">
         {activeTab === "Videos" && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
@@ -58,8 +63,8 @@ const ChannelContent = ({
             ) : (
               channelVideos.map((video) => (
                 <div key={video._id}
-                className="cursor-pointer"
-                onClick={()=>navigate(`/video/${video._id}`)}>
+                  className="cursor-pointer"
+                  onClick={() => navigate(`/video/${video._id}`)}>
                   <img src={video.thumbnailUrl || video.thumbnail} alt={video.title} className="rounded-lg w-full h-32 sm:h-40 object-cover" />
                   <h3 className="mt-2 text-sm font-semibold">{video.title}</h3>
 

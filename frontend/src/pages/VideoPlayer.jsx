@@ -1,3 +1,4 @@
+// Video player with comments, likes, and suggested videos
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
@@ -16,6 +17,7 @@ const VideoPlayer = () => {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Load video and all videos
   useEffect(() => {
     const load = async () => {
       try {
@@ -33,6 +35,7 @@ const VideoPlayer = () => {
     load();
   }, [id]);
 
+  // Add new comment
   const handleAddComment = async () => {
     if (!commentText.trim()) return alert("Comment cannot be empty");
     try {
@@ -45,6 +48,7 @@ const VideoPlayer = () => {
     }
   };
 
+  // Delete comment
   const handleDeleteComment = async (commentId) => {
     try {
       await axios.delete(`/api/videos/${id}/comments/${commentId}`);
@@ -55,6 +59,7 @@ const VideoPlayer = () => {
     }
   };
 
+  // Update comment
   const handleUpdateComment = async (commentId, text) => {
     try {
       await axios.put(`/api/videos/${id}/comments/${commentId}`, { text });
@@ -65,6 +70,7 @@ const VideoPlayer = () => {
     }
   };
 
+  // Like video
   const handleLike = async () => {
     try {
       const res = await axios.post(`/api/videos/${id}/like`);
@@ -74,6 +80,7 @@ const VideoPlayer = () => {
     }
   };
 
+  // Dislike video
   const handleDislike = async () => {
     try {
       const res = await axios.post(`/api/videos/${id}/dislike`);
@@ -88,8 +95,9 @@ const VideoPlayer = () => {
 
   return (
     <div className="w-full flex flex-col lg:flex-row gap-6 p-4">
+      {/* Main video content */}
       <div className="flex-1 min-w-0">
-        {/* Use video tag when videoUrl is a direct URL, else iframe */}
+        {/* Video player - iframe for YouTube, video tag for direct */}
         {video.videoUrl && (video.videoUrl.includes("youtube") || video.videoUrl.includes("embed")) ? (
           <iframe
             title={video.title}
@@ -103,6 +111,7 @@ const VideoPlayer = () => {
 
         <h1 className="text-xl font-semibold mt-3">{video.title}</h1>
 
+        {/* Channel info and like/dislike buttons */}
         <div className="flex justify-between items-center mt-6">
           <div>
             <p className="font-bold text-gray-800 text-lg">{video.channelName}</p>
@@ -112,23 +121,24 @@ const VideoPlayer = () => {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={handleLike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <button onClick={handleLike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full cursor-pointer">
               <AiOutlineLike />
               <span>{video.likes}</span>
             </button>
 
-            <button onClick={handleDislike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+            <button onClick={handleDislike} className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full cursor-pointer">
               <AiOutlineDislike />
               <span>{video.dislikes}</span>
             </button>
           </div>
         </div>
 
+        {/* Video description */}
         <div className="mt-4 p-3 bg-gray-100 rounded-lg">
           <p className="text-gray-700 text-sm">{video.description}</p>
         </div>
 
-        {/* Comments */}
+        {/* Comments section */}
         <div className="mt-6">
           <h2 className="text-lg font-bold mb-3">Comments</h2>
           {user ? (
@@ -140,7 +150,7 @@ const VideoPlayer = () => {
                 placeholder="Add a public comment..."
                 className="flex-1 border p-2 rounded-md"
               />
-              <button onClick={handleAddComment} className="bg-blue-600 text-white px-4 py-2 rounded-md">
+              <button onClick={handleAddComment} className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">
                 Post
               </button>
             </div>
@@ -150,7 +160,7 @@ const VideoPlayer = () => {
 
           <div className="space-y-4">
             {(video.comments || []).map((c) => {
-              // adapt comment object fields: commentId, userId, text, timestamp
+              // Adapt comment object for Comment component
               const commentObj = {
                 _id: c.commentId || c._id,
                 userId: c.userId,
@@ -174,9 +184,15 @@ const VideoPlayer = () => {
         </div>
       </div>
 
+      {/* Suggested videos sidebar */}
       <div className="w-full lg:w-1/3">
         <h2 className="text-lg font-bold mb-3">Suggested Videos</h2>
-        <SuggestedList videos={allVideos} currentId={video._id || video._id} limit={6} onCardClick={(vidId) => navigate(`/video/${vidId}`)} />
+        <SuggestedList 
+          videos={allVideos} 
+          currentId={video._id} 
+          limit={6} 
+          onCardClick={(vidId) => navigate(`/video/${vidId}`)} 
+        />
       </div>
     </div>
   );

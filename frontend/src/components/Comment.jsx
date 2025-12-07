@@ -1,3 +1,4 @@
+// Individual comment component with edit/delete functionality
 import React, { useState } from "react";
 
 const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
@@ -5,15 +6,15 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
   const [editedText, setEditedText] = useState(comment.text);
 
   const isOwner =
-  currentUser &&
-  (currentUser._id === comment.userId ||
-   currentUser.email === comment.userEmail);
+    currentUser &&
+    (currentUser._id === comment.userId ||
+      currentUser.email === comment.userEmail);
 
   const handleSave = () => {
-  if (editedText.trim() === "") return;
-  onUpdate(editedText);
-  setIsEditing(false);
-};
+    if (editedText.trim() === "") return;
+    onUpdate(editedText);
+    setIsEditing(false);
+  };
 
   return (
     <div className="p-3 bg-gray-100 rounded-lg mb-3 flex gap-3">
@@ -35,13 +36,13 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
                 <>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="text-blue-600 text-xs"
+                    className="text-blue-600 text-xs cursor-pointer"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDelete(comment._id)}
-                    className="text-red-600 text-xs"
+                    className="text-red-600 text-xs cursor-pointer"
                   >
                     Delete
                   </button>
@@ -50,7 +51,7 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
                 <>
                   <button
                     onClick={handleSave}
-                    className="text-green-600 text-xs"
+                    className="text-green-600 text-xs cursor-pointer"
                   >
                     Save
                   </button>
@@ -59,7 +60,7 @@ const Comment = ({ comment, currentUser, onDelete, onUpdate }) => {
                       setIsEditing(false);
                       setEditedText(comment.text);
                     }}
-                    className="text-gray-600 text-xs"
+                    className="text-gray-600 text-xs cursor-pointer"
                   >
                     Cancel
                   </button>

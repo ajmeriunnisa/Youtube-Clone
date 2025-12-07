@@ -1,3 +1,4 @@
+// Main App layout with responsive sidebar and header
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -8,6 +9,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  // Set initial sidebar state based on screen size
   useEffect(() => {
     if (window.innerWidth < 1024) setIsSidebarOpen(false);
     else setIsSidebarOpen(true);
@@ -15,6 +17,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header with search and navigation */}
       <Header
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         onSearch={setSearchQuery}
@@ -23,14 +26,23 @@ function App() {
       />
 
       <div className="flex">
-        <Sidebar isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-         />
+        {/* Collapsible sidebar */}
+        <Sidebar 
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
+        {/* Main content area */}
         <main
           className={`flex-1 p-4 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}
         >
-          <Outlet context={{ searchQuery: searchQuery, selectedCategory: selectedCategory, setSelectedCategory: setSelectedCategory,}} />
+          <Outlet 
+            context={{ 
+              searchQuery, 
+              selectedCategory, 
+              setSelectedCategory 
+            }} 
+          />
         </main>
       </div>
     </div>
