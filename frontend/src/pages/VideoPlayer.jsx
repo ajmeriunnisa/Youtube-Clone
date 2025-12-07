@@ -113,11 +113,24 @@ const VideoPlayer = () => {
 
         {/* Channel info and like/dislike buttons */}
         <div className="flex justify-between items-center mt-6">
-          <div>
-            <p className="font-bold text-gray-800 text-lg">{video.channelName}</p>
-            <p className="text-sm text-gray-500">
-              {video.views} views • {new Date(video.uploadDate || video.createdAt).toLocaleDateString()}
-            </p>
+          <div className="flex items-center gap-3">
+            {video.channelProfileImage && (
+              <img
+                src={video.channelProfileImage}
+                alt={video.channelName}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            )}
+
+            <div>
+              <p className="font-bold text-gray-800 text-lg">
+                {video.channelName}
+              </p>
+              <p className="text-sm text-gray-500">
+                {video.views} views •{" "}
+                {new Date(video.uploadDate || video.createdAt).toLocaleDateString()}
+              </p>
+            </div>
           </div>
 
           <div className="flex gap-3">
@@ -187,11 +200,11 @@ const VideoPlayer = () => {
       {/* Suggested videos sidebar */}
       <div className="w-full lg:w-1/3">
         <h2 className="text-lg font-bold mb-3">Suggested Videos</h2>
-        <SuggestedList 
-          videos={allVideos} 
-          currentId={video._id} 
-          limit={6} 
-          onCardClick={(vidId) => navigate(`/video/${vidId}`)} 
+        <SuggestedList
+          videos={allVideos}
+          currentId={video._id}
+          limit={6}
+          onCardClick={(vidId) => navigate(`/video/${vidId}`)}
         />
       </div>
     </div>
