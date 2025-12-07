@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
-import FilterBar from "./FilterBar";
 import { Link, useNavigate } from "react-router-dom";
 
-const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect }) => {
+const Header = ({ onToggleSidebar, onSearch}) => {
   const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
 
@@ -83,116 +82,190 @@ const Header = ({ onToggleSidebar, onSearch, selectedCategory, onCategorySelect 
 
   return (
     <>
-      <header className="w-full h-18 px-4 flex items-center justify-between bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <button onClick={onToggleSidebar} aria-label="Toggle menu" className="p-2 rounded-md hover:bg-gray-200 transition">
-            <FiMenu className="text-xl" />
-          </button>
-          <Link to="/" className="flex items-center gap-1 cursor-pointer" onClick={() => { setSearchText(""); onSearch(""); }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube Logo" className="h-5 md:h-6" />
-          </Link>
-        </div>
+      <header className="w-full h-16 px-3 md:px-6 flex items-center justify-between bg-white border-b border-gray-200 sticky top-0 z-50">
+  {/* Left: menu + logo */}
+  <div className="flex items-center gap-2 md:gap-3 shrink-0">
+  <button
+    id="sidebar-toggle"
+    onClick={onToggleSidebar}
+    aria-label="Toggle menu"
+    className="p-2 rounded-md hover:bg-gray-200 transition shrink-0"
+  >
+    <FiMenu className="text-xl" />
+  </button>
 
-        <form onSubmit={handleSubmit} className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300">
-          <input type="text" placeholder="Search" value={searchText} onChange={(e) => setSearchText(e.target.value)} className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-l-full" />
-          <button type="submit" className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r-full flex items-center justify-center">
-            <FiSearch className="text-gray-600 text-lg" />
-          </button>
-        </form>
+  <Link
+    to="/"
+    className="flex items-center gap-1 cursor-pointer shrink-0"
+    onClick={() => {
+      setSearchText("");
+      onSearch("");
+    }}
+  >
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+      alt="YouTube Logo"
+      className="h-6 w-auto sm:h-7 md:h-6 shrink-0"
+    />
+  </Link>
+</div>
 
-        {!channel && user && (
-          <button onClick={() => navigate("/create-channel")} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-            Create Channel
-          </button>
-        )}
+  {/* Center: desktop search bar */}
+  <form
+    onSubmit={handleSubmit}
+    className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300"
+  >
+    <input
+      type="text"
+      placeholder="Search"
+      value={searchText}
+      onChange={(e) => setSearchText(e.target.value)}
+      className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-l-full"
+    />
+    <button
+      type="submit"
+      className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r-full flex items-center justify-center"
+    >
+      <FiSearch className="text-gray-600 text-lg" />
+    </button>
+  </form>
+  {/* Mobile search bar */}
+<form
+  onSubmit={handleSubmit}
+  className="sm:hidden px-3 pb-2 bg-white border-b border-gray-200"
+>
+  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+    <FiSearch className="text-gray-500 mx-1" />
+    <input
+      type="text"
+      placeholder="Search"
+      value={searchText}
+      onChange={(e) => setSearchText(e.target.value)}
+      className="flex-1 bg-transparent outline-none text-sm px-1"
+    />
+  </div>
+</form>
 
-        <div className="flex items-center gap-4">
-          <button className="p-2 rounded-md hover:bg-gray-200 transition"><FiBell className="text-lg" /></button>
 
-          {user ? (
-            <div ref={dropdownRef} className="relative">
-              <div onClick={() => setShowLogout(!showLogout)} className="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center cursor-pointer uppercase">
-                {user.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.name || user.username || user.email}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  (user.name || user.username || "U").charAt(0)
-                )}
-              </div>
+  {/* Right: icons + avatar / login */}
 
-              {showLogout && (
-                <div className="absolute right-0 mt-2 bg-white border rounded shadow text-sm w-56">
-                  {/* top user info */}
-                  <div className="px-3 py-2 border-b">
-                    <p className="font-semibold text-gray-800">
-                      {user.name || user.username}
-                    </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
-                  </div>
+    {!channel && user && (
+      <button
+        onClick={() => navigate("/create-channel")}
+        className="hidden md:inline-block bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-700"
+      >
+        Create Channel
+      </button>
+    )}
 
-                  {/* account / profile section */}
-                  <div className="py-1 border-b">
-                    {channel && (
-                      <div
-                        onClick={() => {
-                          navigate("/channel");
-                          setShowLogout(false); // close dropdown
-                        }}
-                        className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-                      >
-                        View Your Channel
-                      </div>
-                    )}
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      YouTube Studio
-                    </div>
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Switch account
-                    </div>
-                  </div>
+<div className="flex items-center gap-2 md:gap-4">
+    <button className="p-2 rounded-md hover:bg-gray-200 transition">
+      <FiBell className="text-lg" />
+    </button>
 
-                  {/* settings/help section */}
-                  <div className="py-1 border-b">
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Purchases and memberships
-                    </div>
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Your data in YouTube
-                    </div>
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Settings
-                    </div>
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Help
-                    </div>
-                    <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                      Send feedback
-                    </div>
-                  </div>
-
-                  {/* logout at bottom */}
-                  <div
-                    onClick={handleLogout}
-                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
-                  >
-                    Logout
-                  </div>
-                </div>
-              )}
-
-            </div>
+    {user ? (
+      <div ref={dropdownRef} className="relative">
+        <div
+          onClick={() => setShowLogout(!showLogout)}
+          className="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center cursor-pointer uppercase mr-2"
+        >
+          {user.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name || user.username || user.email}
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <Link to="/login" className="flex items-center gap-2 bg-blue-600 text-white text-sm px-3 py-1.5 rounded-md hover:bg-blue-700 transition"><FiUser /> Sign in</Link>
+            (user.name || user.username || "U").charAt(0)
           )}
         </div>
-      </header>
 
-      <div className="w-full bg-white sticky top-16 z-40 border-b">
-        <FilterBar selectedCategory={selectedCategory} onCategorySelect={onCategorySelect} />
+        {showLogout && (
+          <div className="absolute right-0 mt-2 bg-white border rounded shadow text-sm w-56">
+            {/* top user info */}
+            <div className="px-3 py-2 border-b">
+              <p className="font-semibold text-gray-800">
+                {user.name || user.username}
+              </p>
+              <p className="text-xs text-gray-500">{user.email}</p>
+            </div>
+
+            {/* account / profile section */}
+            <div className="py-1 border-b">
+              {channel && (
+                <div
+                  onClick={() => {
+                    navigate("/channel");
+                    setShowLogout(false);
+                  }}
+                  className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                >
+                  View Your Channel
+                </div>
+                
+              )}
+              {/* Mobile-only Create Channel (shown when user has no channel) */}
+              {!channel && user && (
+                <div
+                  onClick={() => {
+                    navigate("/create-channel");
+                    setShowLogout(false);
+                  }}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer md:hidden"
+                >
+                  Create Channel
+                </div>
+              )}
+              
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                YouTube Studio
+              </div>
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Switch account
+              </div>
+            </div>
+
+            {/* settings/help section */}
+            <div className="py-1 border-b">
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Purchases and memberships
+              </div>
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Your data in YouTube
+              </div>
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Settings
+              </div>
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Help
+              </div>
+              <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                Send feedback
+              </div>
+            </div>
+
+            {/* logout at bottom */}
+            <div
+              onClick={handleLogout}
+              className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
+            >
+              Logout
+            </div>
+          </div>
+        )}
       </div>
+    ) : (
+      <Link
+        to="/login"
+        className="flex items-center gap-2 bg-blue-600 text-white text-xs md:text-sm px-3 py-1.5 rounded-md hover:bg-blue-700 transition"
+      >
+        <FiUser />
+        <span className="hidden sm:inline">Sign in</span>
+      </Link>
+    )}
+  </div>
+</header>
+
     </>
   );
 };

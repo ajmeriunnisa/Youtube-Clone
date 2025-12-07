@@ -27,8 +27,10 @@ function App() {
         onClose={() => setIsSidebarOpen(false)}
          />
 
-        <main className={`flex-1 p-4 transition-all duration-300 ml-0 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}>
-          <Outlet context={{ searchQuery: searchQuery, selectedCategory: selectedCategory }} />
+        <main
+          className={`flex-1 p-4 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}
+        >
+          <Outlet context={{ searchQuery: searchQuery, selectedCategory: selectedCategory, setSelectedCategory: setSelectedCategory,}} />
         </main>
       </div>
     </div>

@@ -34,9 +34,9 @@ const VideoCard = ({ video }) => {
   };
 
   return (
-    <div onClick={handleClick} className="cursor-pointer w-full max-w-lg p-3 rounded-xl transition-all duration-200 hover:bg-gray-200">
+    <div onClick={handleClick} className="cursor-pointer w-full  p-2 rounded-xl transition-all duration-200 hover:bg-gray-100">
       <div className="relative">
-        <img src={video.thumbnailUrl || video.thumbnail} alt={video.title} className="w-full h-60 object-cover rounded-xl transition-all duration-200 hover:rounded-none" />
+        <img src={video.thumbnailUrl || video.thumbnail} alt={video.title} className="w-full h-48 md:h-52 object-cover rounded-xl transition-all duration-200 hover:rounded-none" />
         {typeof video.duration === "number" && video.duration > 0 && (
         <span className="absolute bottom-1 right-1 bg-black/80 text-white text-[11px] px-1.5 py-0.5 rounded-sm">
             {formatDuration(video.duration)}

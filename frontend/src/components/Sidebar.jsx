@@ -9,6 +9,8 @@ const Sidebar = ({ isOpen, onClose  }) => {
     if (!isOpen) return;
 
     const handleClickOutside = (e) => {
+      if (e.target.closest("#sidebar-toggle")) return;
+
       if (sideRef.current && !sideRef.current.contains(e.target)) {
         onClose && onClose();
       }
@@ -19,7 +21,7 @@ const Sidebar = ({ isOpen, onClose  }) => {
   }, [isOpen, onClose]);
 
   return (
-    <aside ref={sideRef} className={`fixed top-32 left-0 bottom-0 z-30 bg-white border-r border-gray-300 overflow-y-auto transition-all duration-300 ease-in-out ${isOpen ? "w-56 translate-x-0" : "w-20 -translate-x-full lg:translate-x-0"}`}>
+   <aside ref={sideRef} className={`fixed lg:top-16 top-29 left-0 bottom-0 z-30 bg-white border-r border-gray-300 overflow-y-auto transition-all duration-300 ease-in-out ${isOpen ? "w-56 translate-x-0" : "w-20 -translate-x-full lg:translate-x-0"}`}>
       <nav className="p-4 flex flex-col gap-2 text-sm text-left">
         <Link to="/">
           <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
