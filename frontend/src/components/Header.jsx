@@ -1,10 +1,13 @@
 // YouTube-style header with search, user dropdown, and navigation
 import React, { useState, useEffect, useRef } from "react";
-import { FiMenu, FiSearch, FiBell, FiUser } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { FiMenu, FiSearch, FiUser } from "react-icons/fi";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = ({ onToggleSidebar, onSearch }) => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [searchText, setSearchText] = useState("");
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   // Initialize user/channel from localStorage
@@ -97,6 +100,7 @@ const Header = ({ onToggleSidebar, onSearch }) => {
             onClick={() => {
               setSearchText("");
               onSearch("");
+              setMobileSearchOpen(false);
             }}
           >
             <img
@@ -108,56 +112,47 @@ const Header = ({ onToggleSidebar, onSearch }) => {
         </div>
 
         {/* Center: desktop search bar */}
-        <form
-          onSubmit={handleSubmit}
-          className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300"
-        >
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-l-full"
-          />
-          <button
-            type="submit"
-            className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r-full flex items-center justify-center"
+        {isHome && (
+          <form
+            onSubmit={handleSubmit}
+            className="hidden sm:flex items-center bg-gray-100 rounded-full px-3 py-1 w-[40%] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-300"
           >
-            <FiSearch className="text-gray-600 text-lg cursor-pointer" />
-          </button>
-        </form>
-
-        {/* Mobile search bar */}
-        <form
-          onSubmit={handleSubmit}
-          className="sm:hidden px-3 pb-2 bg-white border-b border-gray-200"
-        >
-          <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
-            <FiSearch className="text-gray-500 mx-1 cursor-pointer" />
             <input
               type="text"
               placeholder="Search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="flex-1 bg-transparent outline-none text-sm px-1"
+              className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-l-full"
             />
-          </div>
-        </form>
-
-        {/* Right: icons + avatar / login */}
-        {!channel && user && (
-          <button
-            onClick={() => navigate("/create-channel")}
-            className="hidden md:inline-block bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-700"
-          >
-            Create Channel
-          </button>
+            <button
+              type="submit"
+              className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r-full flex items-center justify-center"
+            >
+              <FiSearch className="text-gray-600 text-lg cursor-pointer" />
+            </button>
+          </form>
         )}
 
+        {/* Right: icons + avatar / login */}
         <div className="flex items-center gap-2 md:gap-4">
-          <button className="p-2 rounded-md hover:bg-gray-200 transition">
-            <FiBell className="text-lg" />
-          </button>
+          {/* Mobile search icon (only on small screens) */}
+          {isHome && (
+            <button
+              type="button"
+              className="sm:hidden p-2 rounded-md hover:bg-gray-200 transition"
+              onClick={() => setMobileSearchOpen((prev) => !prev)}
+            >
+              <FiSearch className="text-lg" />
+            </button>
+          )}
+          {!channel && user && (
+            <button
+              onClick={() => navigate("/create-channel")}
+              className="hidden md:inline-block bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-700"
+            >
+              Create Channel
+            </button>
+          )}
 
           {user ? (
             <div ref={dropdownRef} className="relative">
@@ -199,7 +194,7 @@ const Header = ({ onToggleSidebar, onSearch }) => {
                         View Your Channel
                       </div>
                     )}
-                    
+
                     {/* Mobile-only Create Channel */}
                     {!channel && user && (
                       <div
@@ -212,7 +207,7 @@ const Header = ({ onToggleSidebar, onSearch }) => {
                         Create Channel
                       </div>
                     )}
-                    
+
                     <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
                       YouTube Studio
                     </div>
@@ -260,6 +255,24 @@ const Header = ({ onToggleSidebar, onSearch }) => {
             </Link>
           )}
         </div>
+        {/* Mobile search bar */}
+        {isHome && mobileSearchOpen && (
+          <form
+            onSubmit={handleSubmit}
+            className="sm:hidden fixed left-0 right-0 top-30 px-3 pb-2 bg-white border-b border-gray-200 z-40"
+          >
+            <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+              <FiSearch className="text-gray-500 mx-1" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className="flex-1 bg-transparent outline-none text-sm px-1"
+              />
+            </div>
+          </form>
+        )}
       </header>
     </>
   );

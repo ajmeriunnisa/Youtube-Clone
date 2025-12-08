@@ -22,29 +22,30 @@ const Sidebar = ({ isOpen, onClose }) => {
   }, [isOpen, onClose]);
 
   return (
-    <aside 
-      ref={sideRef} 
-      className={`fixed lg:top-16 top-29 left-0 bottom-0 z-30 bg-white border-r border-gray-300 overflow-y-auto transition-all duration-300 ease-in-out ${isOpen ? "w-56 translate-x-0" : "w-20 -translate-x-full lg:translate-x-0"}`}
+    <aside
+      ref={sideRef}
+      className={`
+    fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-gray-300 overflow-y-auto transition-all duration-300 ease-in-out ${isOpen ? "w-56 translate-x-0" : "w-20 -translate-x-full lg:translate-x-0"}`}
     >
       {/* Navigation menu */}
       <nav className="p-4 flex flex-col gap-2 text-sm text-left">
         {/* Home link */}
         <Link to="/">
           <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-            <FiHome /> 
+            <FiHome />
             <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Home</span>
           </div>
         </Link>
 
         {/* Explore */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiCompass /> 
+          <FiCompass />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Explore</span>
         </div>
 
         {/* Trending */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiTrendingUp /> 
+          <FiTrendingUp />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Trending</span>
         </div>
 
@@ -53,31 +54,31 @@ const Sidebar = ({ isOpen, onClose }) => {
 
         {/* Library */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiYoutube /> 
+          <FiYoutube />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Library</span>
         </div>
 
         {/* Watch Later */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiClock /> 
+          <FiClock />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Watch Later</span>
         </div>
 
         {/* Liked Videos */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiThumbsUp /> 
+          <FiThumbsUp />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Liked Videos</span>
         </div>
 
         {/* Your Videos */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiPlay /> 
+          <FiPlay />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Your Videos</span>
         </div>
 
         {/* Playlists */}
         <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md">
-          <FiList /> 
+          <FiList />
           <span className={`${isOpen ? "inline" : "hidden"} truncate`}>Playlists</span>
         </div>
       </nav>

@@ -25,25 +25,32 @@ function App() {
         onCategorySelect={setSelectedCategory}
       />
 
-      <div className="flex">
+      <div className="relative flex">
         {/* Collapsible sidebar */}
-        <Sidebar 
+        <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
 
         {/* Main content area */}
         <main
-          className={`flex-1 p-4 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}
+          className={`flex-1 p- overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "lg:ml-56" : "lg:ml-20"}`}
         >
-          <Outlet 
-            context={{ 
-              searchQuery, 
-              selectedCategory, 
-              setSelectedCategory 
-            }} 
+          <Outlet
+            context={{
+              searchQuery,
+              selectedCategory,
+              setSelectedCategory
+            }}
           />
         </main>
+        {/* DARK OVERLAY when sidebar open on small/medium screens */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/40 sm:bg-black/40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

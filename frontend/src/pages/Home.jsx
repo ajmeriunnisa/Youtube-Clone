@@ -14,13 +14,13 @@ const Home = () => {
     !searchQuery || searchQuery.trim() === ""
       ? videos
       : videos.filter((video) =>
-          (video.title || "").toLowerCase().includes(searchQuery.toLowerCase().trim())
-        );
+        (video.title || "").toLowerCase().includes(searchQuery.toLowerCase().trim())
+      );
 
   return (
-    <div className="px-0 mt-15">
+    <div className="px-0">
       {/* Fixed filter bar below header */}
-      <div className="fixed top-16 z-40 w-full bg-white border-b">
+      <div className="fixed top-16 z-40 w-full bg-white border-b shadow-sm">
         <FilterBar
           selectedCategory={selectedCategory}
           onCategorySelect={setSelectedCategory}
@@ -28,7 +28,7 @@ const Home = () => {
       </div>
 
       {/* Video grid content */}
-      <div className="px-2 sm:px-6 mt-4">
+      <div className="px-2 sm:px-6 pt-18 sm:pt-16">
         {loading && (
           <p className="text-center text-gray-500">Loading videos...</p>
         )}

@@ -7,9 +7,9 @@ const FilterBar = ({ selectedCategory, onCategorySelect }) => {
   const scrollRef = useRef(null);
 
   return (
-    <div 
+    <div
       ref={scrollRef}
-      className="flex space-x-3 overflow-x-auto py-3 px-3 sm:px-8 scrollbar-none bg-white border-b border-gray-200"
+      className="flex space-x-3 overflow-x-auto py-4 px-2 sm:px-8 scrollbar-none bg-white border-b border-gray-200"
     >
       {categories.map((category) => {
         const isActive = selectedCategory === category;
