@@ -207,6 +207,11 @@ Frontend will usually run on `http://localhost:5173`.
 This project is inspired by the YouTube interface and various open‑source YouTube clone tutorials and articles about building MERN applications.  
 It is meant for learning purposes (React, Tailwind, Node.js, Express.js, MongoDB, and JWT authentication).
 
+---
+
+## 🔗 Video Demo Link
+
+https://drive.google.com/file/d/1VIeptjE-vz4kRrV95s4V9iJHPZTEuSbe/view?usp=drive_link
 
 
 
