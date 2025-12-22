@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // API base URL from environment variable or localhost
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL || "https://youtube-backend-gfe6.onrender.com";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
